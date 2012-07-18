@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jQuery Visual Range</title>
+    <style type="text/css">
+        .visual-range {
+            height: 50px;
+            border: #ccc;
+            background: #f8f8f8;
+        }
+        .bar {
+            float: left;
+            background: #eee;
+            height: 30px;
+        }
+        .picker {
+            position: absolute;
+            float: left;
+            background: #fff;
+            border: solid 1px #ccc;
+            padding: 5px;
+            z-index: 999;
+        }
+        .description {
+            position: relative;
+            top: 30px;
+        }
+    </style>
+    <script src="{{ STATIC_URL }}jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(function(){
+
+            // Properties
+            var $props = {
+                vr: $('.visual-range'),
+                ranges: $('#ranges'),
+                input_number: '<input type="number" class="input-range" step="0.1" min="0">',
+                input_description: '<input type="text" class="input-description" placeholder="descrição">',
+                input_color: '<input type="text" class="input-color" placeholder="cor">'
+            };
+
+            // Add range component
+            $(document).on('click', '#add-range', function() {
+                var $fields = $(
+                    $props.input_number + ' ' +
+                    $props.input_number + ' ' +
+                    $props.input_description + ' ' +
+                    $props.input_color
+                );
+                var $range = $('<div data-bind class="range">');
+                var $bar = $('<div data-bind class="bar">');
+                $range.html($fields);
+                $props.ranges.append($range);
+
+                // Procedure to binding input with $bar
+                var $ranges = $('.range', $props.ranges);
+                $range.attr('data-bind', $ranges.length);
+
+                // Add bars in visual bars
+                $props.vr.append($bar.attr('data-bind', $ranges.length));
+
+            });
+
+            // Add data values
+            var update_range = function () {
+                var $range = $(this).closest('.range');
+                var $input_range = $range.find('.input-range');
+                var $input_description = $range.find('.input-description');
+                var $input_color = $range.find('.input-color');
+
+                var i = 0;
+                var $val = 0;
+                for (i; i < $input_range.length; i ++) {
+                    if ($($input_range[i]).val()){
+
+                        // Sum values
+                        $val = parseFloat($val) + parseFloat($($input_range[i]).val());
+
+                        // Update bar in percent values
+                        $('.bar[data-bind=' + $range.attr('data-bind') + ']').css({
+                            'width': $range.attr('data-value') + '%',
+                            'background': $input_color.val()
+                        }).html('<span class="description">' + $input_description.val() + '</span>');
+                    }
+                }
+
+                $range.attr('data-value', $val);
+            };
+
+            // change range
+            $(document).on('change', '.input-range', update_range);
+            $(document).on('keyup', '.input-range', update_range);
+
+            // change description
+            $(document).on('change', '.input-description', update_range);
+            $(document).on('keyup', '.input-description', update_range);
+
+            // change color
+            $(document).on('change', '.input-color', update_range);
+            $(document).on('keyup', '.input-color', update_range);
+
+        });
+
+    </script>
+</head>
+<body>
+<div class="visual-range"></div>
+<button id="add-range">Add Range</button>
+<div id="ranges"></div>
+</body>
+</html>
