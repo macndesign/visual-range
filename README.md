@@ -1,0 +1,4 @@
+visual-range
+============
+
+Range component
