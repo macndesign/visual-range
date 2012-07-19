@@ -3,6 +3,12 @@
 <head>
     <title>jQuery Visual Range</title>
     <style type="text/css">
+        /* base */
+        .range { clear: both }
+        .range input, .range .picker {
+            float: left;
+        }
+
         .visual-range {
             height: 50px;
             border: #ccc;
@@ -13,17 +19,23 @@
             background: #eee;
             height: 30px;
         }
-        .picker {
-            position: absolute;
-            float: left;
-            background: #fff;
-            border: solid 1px #ccc;
-            padding: 5px;
-            z-index: 999;
-        }
         .description {
             position: relative;
             top: 30px;
+        }
+
+        /* color picker */
+        .color {
+            float: left;
+            background: #eee;
+            height: 16px;
+            width: 16px;
+        }
+        .picker {
+            background: #fff;
+            border: solid 1px #ccc;
+            padding: 2px;
+            margin: 2px;
         }
     </style>
     <script src="{{ STATIC_URL }}jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -33,21 +45,29 @@
 
             // Properties
             var $props = {
-                vr: $('.visual-range'),
+                visual_range: $('.visual-range'),
                 ranges: $('#ranges'),
                 input_number: '<input type="number" class="input-range" step="0.1" min="0">',
-                input_description: '<input type="text" class="input-description" placeholder="descrição">',
-                input_color: '<input type="text" class="input-color" placeholder="cor">'
+                input_description: '<input type="text" class="input-description" placeholder="description">',
+                input_color: '<input type="hidden" class="input-color">',
+                picker: '<div class="picker"></div>'
             };
+
+            // Color settings
+            var $colors = ['orange', 'purple', 'yellow', 'green', 'red'];
 
             // Add range component
             $(document).on('click', '#add-range', function() {
+
+                // Components
                 var $fields = $(
                     $props.input_number + ' ' +
                     $props.input_number + ' ' +
                     $props.input_description + ' ' +
-                    $props.input_color
+                    $props.input_color + ' ' +
+                    $props.picker
                 );
+
                 var $range = $('<div data-bind class="range">');
                 var $bar = $('<div data-bind class="bar">');
                 $range.html($fields);
@@ -58,20 +78,27 @@
                 $range.attr('data-bind', $ranges.length);
 
                 // Add bars in visual bars
-                $props.vr.append($bar.attr('data-bind', $ranges.length));
+                $props.visual_range.append($bar.attr('data-bind', $ranges.length));
+
+                // Build a color picker
+                var $picker = $('.picker');
+                var $color_set = '';
+                for (var i = 0; i < $colors.length; i ++){
+                    $color_set += '<div class="color" style="background: ' + $colors[i] + '"></div>';
+                }
+                $picker.html($color_set);
 
             });
 
             // Add data values
-            var update_range = function () {
+            var $update_range = function () {
                 var $range = $(this).closest('.range');
                 var $input_range = $range.find('.input-range');
                 var $input_description = $range.find('.input-description');
                 var $input_color = $range.find('.input-color');
 
-                var i = 0;
                 var $val = 0;
-                for (i; i < $input_range.length; i ++) {
+                for (var i = 0; i < $input_range.length; i ++) {
                     if ($($input_range[i]).val()){
 
                         // Sum values
@@ -89,16 +116,23 @@
             };
 
             // change range
-            $(document).on('change', '.input-range', update_range);
-            $(document).on('keyup', '.input-range', update_range);
+            $(document).on('change', '.input-range', $update_range);
+            $(document).on('keyup', '.input-range', $update_range);
 
             // change description
-            $(document).on('change', '.input-description', update_range);
-            $(document).on('keyup', '.input-description', update_range);
+            $(document).on('change', '.input-description', $update_range);
+            $(document).on('keyup', '.input-description', $update_range);
 
             // change color
-            $(document).on('change', '.input-color', update_range);
-            $(document).on('keyup', '.input-color', update_range);
+            $(document).on('change', '.input-color', $update_range);
+            $(document).on('keyup', '.input-color', $update_range);
+            $(document).on('focus', '.input-color', $update_range);
+
+            // Click color
+            $(document).on('click', '.color', function() {
+                var $this_color = $(this).css('background');
+                $(this).closest('.range').find('.input-color').val($this_color).focus();
+            });
 
         });
 
