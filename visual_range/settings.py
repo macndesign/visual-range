@@ -105,7 +105,7 @@ ROOT_URLCONF = 'visual_range.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'visual_range.wsgi.application'
 
-TEMPLATE_DIRS = ('C:/works/visual_range/templates',)
+TEMPLATE_DIRS = ('templates',)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
