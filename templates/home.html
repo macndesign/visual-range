@@ -19,9 +19,10 @@
             background: #eee;
             height: 30px;
         }
-        .description {
+        .sum-val {
             position: relative;
             top: 30px;
+            float: right;
         }
 
         /* color picker */
@@ -50,6 +51,26 @@
             margin: 2px;
             padding: 0;
         }
+
+        /* Legend */
+        #legend {
+            display: block;
+            clear: both;
+            list-style: none;
+            padding: 0;
+        }
+        .item-legend {
+            display: block;
+            clear: both;
+        }
+        .color-legend {
+            float: left;
+            border: solid 1px #eee;
+            background: #f7f7f7;
+            height: 12px;
+            width: 12px;
+            margin-top: 3px;
+        }
     </style>
     <script src="{{ STATIC_URL }}jquery-1.7.2.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -70,7 +91,7 @@
             var $colors = ['white', 'black', 'orange', 'purple', 'yellow', 'green', 'red'];
 
             // Add range component
-            $(document).on('click', '#add-range', function() {
+            var $add_range = function() {
 
                 // Components
                 var $fields = $(
@@ -102,7 +123,17 @@
                 }
                 $picker.html($color_set);
 
-            });
+                // Build a legend
+                var $legend = $('#legend');
+                var $item_legend = $('<li data-bind class="item-legend">');
+                var $color_legend = '<span class="color-legend"></span>';
+                var $text_legend = '<span class="text-legend"></span>';
+                $legend.append($item_legend.attr('data-bind', $ranges.length));
+                $item_legend.append($color_legend + '&nbsp;' + $text_legend);
+
+            };
+
+            $(document).on('click', '#add-range', $add_range);
 
             // Add data values
             var $update_range = function () {
@@ -122,7 +153,12 @@
                         $('.bar[data-bind=' + $range.attr('data-bind') + ']').css({
                             'width': $range.attr('data-value') + '%',
                             'background': $input_color.val()
-                        }).html('<span class="description">' + $input_description.val() + '</span>');
+                        }).html('<span class="sum-val">' + $val + '</span>');
+
+                        // Setting text and color in legend items
+                        var $item_legend = $('.item-legend[data-bind=' + $range.attr('data-bind') + ']');
+                        $item_legend.find('.text-legend').html($input_description.val());
+                        $item_legend.find('.color-legend').css({'background': $input_color.val()});
                     }
                 }
 
@@ -143,7 +179,7 @@
             $(document).on('focus', '.input-color', $update_range);
 
             // Click color
-            $(document).on('click', '.color', function() {
+            var $click_color = function() {
                 var $this = $(this);
                 var $range = $this.closest('.range');
                 var $this_color = $this.css('background');
@@ -154,7 +190,9 @@
                 // Remove others
                 $range.find('.color').removeClass('selected-color');
                 $this.addClass('selected-color');
-            });
+            };
+
+            $(document).on('click', '.color', $click_color);
 
         });
 
@@ -164,5 +202,6 @@
 <div class="visual-range"></div>
 <button id="add-range">Add Range</button>
 <div id="ranges"></div>
+<ul id="legend"></ul>
 </body>
 </html>
