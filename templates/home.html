@@ -26,16 +26,29 @@
 
         /* color picker */
         .color {
+            display: inline;
             float: left;
+            list-style: none;
             background: #eee;
-            height: 16px;
-            width: 16px;
+            height: 20px;
+            width: 20px;
+            cursor: pointer;
+            /* Opacity cross browser */
+            -moz-opacity: .10;
+            filter: alpha(opacity=10);
+            opacity: .10;
+        }
+        /* Opacity cross browser */
+        .selected-color {
+            -moz-opacity: 1;
+            filter: alpha(opacity=100);
+            opacity: 1;
         }
         .picker {
             background: #fff;
-            border: solid 1px #ccc;
-            padding: 2px;
+            border: solid 1px #eee;
             margin: 2px;
+            padding: 0;
         }
     </style>
     <script src="{{ STATIC_URL }}jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -50,11 +63,11 @@
                 input_number: '<input type="number" class="input-range" step="0.1" min="0">',
                 input_description: '<input type="text" class="input-description" placeholder="description">',
                 input_color: '<input type="hidden" class="input-color">',
-                picker: '<div class="picker"></div>'
+                picker: '<ul class="picker"></ul>'
             };
 
             // Color settings
-            var $colors = ['orange', 'purple', 'yellow', 'green', 'red'];
+            var $colors = ['white', 'black', 'orange', 'purple', 'yellow', 'green', 'red'];
 
             // Add range component
             $(document).on('click', '#add-range', function() {
@@ -81,10 +94,11 @@
                 $props.visual_range.append($bar.attr('data-bind', $ranges.length));
 
                 // Build a color picker
-                var $picker = $('.picker');
+                var $last_range = $('.range:last');
+                var $picker = $last_range.find('.picker');
                 var $color_set = '';
                 for (var i = 0; i < $colors.length; i ++){
-                    $color_set += '<div class="color" style="background: ' + $colors[i] + '"></div>';
+                    $color_set += '<li class="color" style="background: ' + $colors[i] + '"></li>';
                 }
                 $picker.html($color_set);
 
@@ -130,8 +144,16 @@
 
             // Click color
             $(document).on('click', '.color', function() {
-                var $this_color = $(this).css('background');
-                $(this).closest('.range').find('.input-color').val($this_color).focus();
+                var $this = $(this);
+                var $range = $this.closest('.range');
+                var $this_color = $this.css('background');
+
+                // Apply color
+                $range.find('.input-color').val($this_color).focus();
+
+                // Remove others
+                $range.find('.color').removeClass('selected-color');
+                $this.addClass('selected-color');
             });
 
         });
