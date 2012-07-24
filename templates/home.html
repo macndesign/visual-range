@@ -80,16 +80,16 @@
 
             // Properties
             var $props = {
+                main_comp: $('#vr'),
                 visual_range: $('.visual-range'),
                 ranges: $('#ranges'),
+                colors: ['white', 'black', 'orange', 'purple', 'yellow', 'green', 'red'],
+                btn_add: '#add-range',
                 input_number: '<input type="number" class="input-range" step="0.1" min="0">',
                 input_description: '<input type="text" class="input-description" placeholder="description">',
                 input_color: '<input type="hidden" class="input-color">',
                 picker: '<ul class="picker"></ul>'
             };
-
-            // Color settings
-            var $colors = ['white', 'black', 'orange', 'purple', 'yellow', 'green', 'red'];
 
             // Add range component
             var $add_range = function() {
@@ -119,8 +119,8 @@
                 var $last_range = $('.range:last');
                 var $picker = $last_range.find('.picker');
                 var $color_set = '';
-                for (var i = 0; i < $colors.length; i ++){
-                    $color_set += '<li class="color" style="background: ' + $colors[i] + '"></li>';
+                for (var i = 0; i < $props.colors.length; i ++){
+                    $color_set += '<li class="color" style="background: ' + $props.colors[i] + '"></li>';
                 }
                 $picker.html($color_set);
 
@@ -133,8 +133,6 @@
                 $item_legend.append($color_legend + '&nbsp;' + $text_legend);
 
             };
-
-            $(document).on('click', '#add-range', $add_range);
 
             // Add data values
             var $update_range = function () {
@@ -166,19 +164,6 @@
                 $range.attr('data-value', $val);
             };
 
-            // change range
-            $(document).on('change', '.input-range', $update_range);
-            $(document).on('keyup', '.input-range', $update_range);
-
-            // change description
-            $(document).on('change', '.input-description', $update_range);
-            $(document).on('keyup', '.input-description', $update_range);
-
-            // change color
-            $(document).on('change', '.input-color', $update_range);
-            $(document).on('keyup', '.input-color', $update_range);
-            $(document).on('focus', '.input-color', $update_range);
-
             // Click color
             var $click_color = function() {
                 var $this = $(this);
@@ -193,16 +178,35 @@
                 $this.addClass('selected-color');
             };
 
-            $(document).on('click', '.color', $click_color);
+            // add range action
+            $props.main_comp.on('click', $props.btn_add, $add_range);
+
+            // change range
+            $props.main_comp.on('change', '.input-range', $update_range);
+            $props.main_comp.on('keyup', '.input-range', $update_range);
+
+            // change description
+            $props.main_comp.on('change', '.input-description', $update_range);
+            $props.main_comp.on('keyup', '.input-description', $update_range);
+
+            // change color
+            $props.main_comp.on('change', '.input-color', $update_range);
+            $props.main_comp.on('keyup', '.input-color', $update_range);
+            $props.main_comp.on('focus', '.input-color', $update_range);
+
+            // color picker
+            $props.main_comp.on('click', '.color', $click_color);
 
         });
 
     </script>
 </head>
 <body>
-<div class="visual-range"></div>
-<button id="add-range">Add Range</button>
-<div id="ranges"></div>
-<ul id="legend"></ul>
+<div id="vr">
+    <div class="visual-range"></div>
+    <button id="add-range">Add Range</button>
+    <div id="ranges"></div>
+    <ul id="legend"></ul>
+</div>
 </body>
 </html>
