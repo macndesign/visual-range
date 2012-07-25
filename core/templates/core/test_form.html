@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} - Select2{% endblock %}
+
+{% block extra_head %}
+    <style type="text/css">
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 13px;
+            color: #333;
+        }
+        .div-item {
+            line-height: 20px;
+        }
+        .select2-result {
+            border-bottom: solid 1px #ccc;
+        }
+    </style>
+    <link href="{{ STATIC_URL }}select2/select2.css" type="text/css" rel="stylesheet">
+    <script src="{{ STATIC_URL }}jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}select2/select2.min.js" type="text/javascript"></script>
+    <script>
+
+        function movieFormatResult(movie) {
+            var markup = "<div class='div-item'>" + "<strong>" + movie.title + "</strong>" + ": ";
+
+            if (movie.critics_consensus !== undefined) {
+                markup += movie.critics_consensus;
+            }
+
+            return markup += "</div>";
+        }
+
+        function movieFormatSelection(movie) {
+            return movie.title;
+        }
+
+    </script>
+    <script id="script_e6">
+        $(document).ready(function() { $("#id_test").select2(); });
+        $(document).ready(function() {
+            $("#e6").select2({
+                placeholder: {title: "Search for a movie", id: ""},
+                minimumInputLength: 1,
+                ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                    url: "http://api.rottentomatoes.com/api/public/v1.0/movies.json",
+                    dataType: 'jsonp',
+                    data: function (term, page) {
+                        return {
+                            q: term, // search term
+                            page_limit: 10,
+                            apikey: "ju6z9mjyajq2djue3gbvv26t" // please do not use so this example keeps working
+                        };
+                    },
+                    results: function (data, page) { // parse the results into the format expected by Select2.
+                        // since we are using custom formatting functions we do not need to alter remote JSON data
+                        return {results: data.movies};
+                    }
+                },
+                formatResult: movieFormatResult, // omitted for brevity, see the source of this page
+                formatSelection: movieFormatSelection  // omitted for brevity, see the source of this page
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    {{ form.as_p }}
+    <input type="hidden" class="bigdrop" id="e6" style="width:600px"/>
+
+    {# Maps sample #}
+
+{% endblock %}
