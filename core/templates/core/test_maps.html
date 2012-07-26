@@ -16,7 +16,7 @@
         }
     </style>
     <script type="text/javascript">
-    /*function initialize() {
+    function initialize() {
         var mapOptions = {
             center: new google.maps.LatLng(-33.8688, 151.2195),
             zoom: 13,
@@ -87,8 +87,9 @@
         setupClickListener('changetype-all', []);
         setupClickListener('changetype-establishment', ['establishment']);
         setupClickListener('changetype-geocode', ['geocode']);
+        // setupClickListener('changetype-sublocality', ['sublocality']);
     }
-    google.maps.event.addDomListener(window, 'load', initialize);*/
+    google.maps.event.addDomListener(window, 'load', initialize);
 
     function maps_clean() {
         var input = document.getElementById('searchMapsClean');
@@ -140,7 +141,7 @@
 {% endblock %}
 
 {% block content %}
-    <!--div>
+    <div>
         <input id="searchTextField" type="text" size="50">
         <input type="radio" name="type" id="changetype-all" checked="checked">
         <label for="changetype-all">All</label>
@@ -150,9 +151,12 @@
 
         <input type="radio" name="type" id="changetype-geocode">
         <label for="changetype-geocode">Geocodes</label>
+
+        <!--input type="radio" name="type" id="changetype-sublocality">
+        <label for="changetype-sublocality">Sublocality</label-->
     </div>
 
-    <div id="map_canvas"></div-->
+    <div style="height: 0; overflow: hidden;"><div id="map_canvas"></div></div>
 
     <div>
         <input id="searchMapsClean" type="text" size="50"><br>
