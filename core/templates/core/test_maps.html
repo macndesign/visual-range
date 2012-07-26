@@ -16,7 +16,7 @@
         }
     </style>
     <script type="text/javascript">
-    function initialize() {
+    /*function initialize() {
         var mapOptions = {
             center: new google.maps.LatLng(-33.8688, 151.2195),
             zoom: 13,
@@ -88,7 +88,7 @@
         setupClickListener('changetype-establishment', ['establishment']);
         setupClickListener('changetype-geocode', ['geocode']);
     }
-    google.maps.event.addDomListener(window, 'load', initialize);
+    google.maps.event.addDomListener(window, 'load', initialize);*/
 
     function maps_clean() {
         var input = document.getElementById('searchMapsClean');
@@ -110,6 +110,7 @@
                 ].join(',');
             }
 
+            console.log(place);
             console.log(place.address_components);
             console.log(short_address.split(","));
             console.log(long_address.split(","));
@@ -139,7 +140,7 @@
 {% endblock %}
 
 {% block content %}
-    <div>
+    <!--div>
         <input id="searchTextField" type="text" size="50">
         <input type="radio" name="type" id="changetype-all" checked="checked">
         <label for="changetype-all">All</label>
@@ -151,7 +152,7 @@
         <label for="changetype-geocode">Geocodes</label>
     </div>
 
-    <div id="map_canvas"></div>
+    <div id="map_canvas"></div-->
 
     <div>
         <input id="searchMapsClean" type="text" size="50"><br>

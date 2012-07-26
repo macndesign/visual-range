@@ -1,0 +1,76 @@
+﻿Para uma pesquisa por:
+Bom Futuro, Fortaleza - Ceará, Brasil
+
+É produzido o seguinte objeto:
+Object
+....address_components: Array[4]
+........0: Object
+............long_name: "Bom Futuro"
+............short_name: "Bom Futuro"
+............types: Array[2]
+................0: "sublocality"
+................1: "political"
+................length: 2
+................__proto__: Array[0]
+............__proto__: Object
+........1: Object
+............long_name: "Fortaleza"
+............short_name: "Fortaleza"
+............types: Array[2]
+................0: "locality"
+................1: "political"
+................length: 2
+................__proto__: Array[0]
+............__proto__: Object
+........2: Object
+............long_name: "Ceará"
+............short_name: "CE"
+............types: Array[2]
+................0: "administrative_area_level_1"
+................1: "political"
+................length: 2
+................__proto__: Array[0]
+............__proto__: Object
+........3: Object
+............long_name: "Brasil"
+............short_name: "BR"
+............types: Array[2]
+................0: "country"
+................1: "political"
+................length: 2
+................__proto__: Array[0]
+............__proto__: Object
+........length: 4
+........__proto__: Array[0]
+....formatted_address: "Bom Futuro, Fortaleza - CE, Brasil"
+....geometry: Object
+........location: P
+............$a: -3.758691
+............ab: -38.5467266
+............__proto__: P
+........viewport: pe
+............ca: oe
+................b: -3.7618616
+................j: -3.753950499999999
+................__proto__: oe
+............ea: ke
+................b: -38.550447899999995
+................j: -38.54223890000003
+................__proto__: ke
+............__proto__: pe
+........__proto__: Object
+....html_attributions: Array[0]
+........length: 0
+........__proto__: Array[0]
+....icon: "http://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png"
+....id: "59a42f57d83952d8ea5649281b7058f272e39ccf"
+....name: "Bom Futuro"
+....reference: "CnRpAAAAw4uz_qeTwTGen8vyuI1Sgs4gRV6ZFebrYrh1O4lNHLybYY1-bSiqzZuFE4LObcTR_SFr0hBcVQ2MEp3xehcGmZFAHM9Sxxg4omdZjfGJ6jUEgQeFDJJjKNagItAosc6FYYv5ZN4L-fDm_hhimJr9dRIQdIQfLIXb-2_ldsGC76teBhoUbphewJfRlqMTce1kly_FZJqsdt0"
+....types: Array[2]
+........0: "sublocality"
+........1: "political"
+........length: 2
+........__proto__: Array[0]
+....url: "https://maps.google.com/maps/place?q=Bom+Futuro&ftid=0x7c74937894443d5:0x5deec20bc55e6a80"
+....vicinity: "Bom Futuro"
+....__proto__: Object

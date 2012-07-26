@@ -1,0 +1,64 @@
+﻿Para uma pesquisa por:
+Rua Professor Costa Mendes, Fortaleza - Ceará, Brasil
+
+É produzido o seguinte objeto:
+Object
+....address_components: Array[4]
+........0: Object
+............long_name: "R. Prof. Costa Mendes"
+............short_name: "R. Prof. Costa Mendes"
+............types: Array[1]
+................0: "route"
+................length: 1
+................__proto__: Array[0]
+............__proto__: Object
+........1: Object
+............long_name: "Fortaleza"
+............short_name: "Fortaleza"
+............types: Array[2]
+................0: "locality"
+................1: "political"
+................length: 2
+................__proto__: Array[0]
+............__proto__: Object
+........2: Object
+............long_name: "Ceará"
+............short_name: "CE"
+............types: Array[2]
+................0: "administrative_area_level_1"
+................1: "political"
+................length: 2
+................__proto__: Array[0]
+............__proto__: Object
+........3: Object
+............long_name: "Brasil"
+............short_name: "BR"
+............types: Array[2]
+................0: "country"
+................1: "political"
+................length: 2
+................__proto__: Array[0]
+............__proto__: Object
+........length: 4
+........__proto__: Array[0]
+....formatted_address: "R. Prof. Costa Mendes - Fortaleza - CE, Brasil"
+....geometry: Object
+........location: P
+............$a: -3.7523955
+............ab: -38.54946789999997
+............__proto__: P
+........__proto__: Object
+....html_attributions: Array[0]
+........length: 0
+........__proto__: Array[0]
+....icon: "http://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png"
+....id: "23a2237ffc0d574cdd2500ab069f53543e0d2d01"
+....name: "R. Prof. Costa Mendes"
+....reference: "CoQBdAAAAN7ya46U8mxTT9ZK9VjT8nKJtQemJJgz-crLqCTv1Fgzop67NlGLH054ixaNzBW1gQ370VsFBRBzKh4KKn-lQ9cFYO2fqngxq4p6EIAxn_dUnpeeFhsuUge1s73gtkgpMchdhCA4kSVxL4vaIUYmnB4Y0qE_b04iE8dsm46rwLHGEhC2uf2XXILrgaD2DTjTakZaGhRXr5i93ceiUXlXrWo7AqlZJyVgow"
+....types: Array[1]
+........0: "route"
+........length: 1
+........__proto__: Array[0]
+....url: "https://maps.google.com/maps/place?q=R.+Prof.+Costa+Mendes&ftid=0x7c7494095027dfb:0xd31d38c45da8932b"
+....vicinity: "Fortaleza"
+....__proto__: Object
