@@ -1,0 +1,99 @@
+﻿Para uma pesquisa por <Divina Comida>:
+Divina Comida - Rua Desembargador Leite Albuquerque, Fortaleza - Ceará, Brasil
+
+É produzido o seguinte objeto:
+Object
+....address_components: Array[7]
+........0: Object
+............long_name: "920"
+............short_name: "920"
+............types: Array[1]
+................0: "street_number"
+................length: 1
+................__proto__: Array[0]
+............__proto__: Object
+........1: Object
+............long_name: "Rua Desembargador Leite Albuquerque"
+............short_name: "Rua Desembargador Leite Albuquerque"
+............types: Array[1]
+................0: "route"
+................length: 1
+................__proto__: Array[0]
+............__proto__: Object
+........2: Object
+............long_name: "Aldeota"
+............short_name: "Aldeota"
+............types: Array[2]
+................0: "sublocality"
+................1: "political"
+................length: 2
+................__proto__: Array[0]
+............__proto__: Object
+........3: Object
+............long_name: "Fortaleza"
+............short_name: "Fortaleza"
+............types: Array[2]
+................0: "locality"
+................1: "political"
+................length: 2
+................__proto__: Array[0]
+............__proto__: Object
+........4: Object
+............long_name: "CE"
+............short_name: "CE"
+............types: Array[2]
+................0: "administrative_area_level_1"
+................1: "political"
+................length: 2
+................__proto__: Array[0]
+............__proto__: Object
+........5: Object
+............long_name: "BR"
+............short_name: "BR"
+............types: Array[2]
+................0: "country"
+................1: "political"
+................length: 2
+................__proto__: Array[0]
+............__proto__: Object
+........6: Object
+............long_name: "60150-150"
+............short_name: "60150-150"
+............types: Array[1]
+................0: "postal_code"
+................length: 1
+................__proto__: Array[0]
+............__proto__: Object
+........length: 7
+........__proto__: Array[0]
+....formatted_address: "Rua Desembargador Leite Albuquerque, 920 - Aldeota, Fortaleza - CE, Brasil"
+....formatted_phone_number: "(85) 3261-0542"
+....geometry: Object
+........location: P
+............$a: -3.73816
+............ab: -38.49616800000001
+............__proto__: P
+........__proto__: Object
+....html_attributions: Array[1]
+........0: "Listagens por <a href="http://www.telelistas.net/">Telelistas</a>"
+........length: 1
+........__proto__: Array[0]
+....icon: "http://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png"
+....id: "8cbbaa120c4558d7dfd3259ee899815979d875ba"
+....international_phone_number: "+55 85 3261-0542"
+....name: "Divina Comida"
+....reference: "CnRjAAAAmx8Kb1slqM87uzTfAMnErMH7AOLQ_Gocx0sTQBt3Uf4NAlSEldKxqlwiymiakKONSm6O60URaTyEiP9EUEh9Jf3lsnpQaQcfd-g7WlzZh3CtspCWHaWahv9IpygEcJmQp2UqaBwCSl7TekZWKU5zEhIQgwqlOahkaMrsSJC88GLSghoUwDU4PxYzIar9uSy8XizB2Rojsd4"
+....reviews: Array[1]
+........0: Object
+........length: 1
+........__proto__: Array[0]
+....types: Array[1]
+........0: "establishment"
+........length: 1
+........__proto__: Array[0]
+....tz: "GMT-0300"
+....url: "https://plus.google.com/106235053434223921438/about?hl=pt-BR"
+....utc_offset: -180
+....vicinity: "Rua Desembargador Leite Albuquerque, 920 - Aldeota, Fortaleza"
+....website: "http://www.divinacomidarestaurante.com.br/"
+....__proto__: Object

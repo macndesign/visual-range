@@ -68,11 +68,10 @@
             infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
             infowindow.open(map, marker);
 
-            // Separated data
-            var city = address.split(' ')[0];
-            var state = address.split(' ')[1];
-            var country = address.split(' ')[2];
-            console.log(city +' '+ state +' '+ country);
+            // Address
+            console.log(place);
+            console.log(place.address_components);
+            console.log(address);
         });
 
         // Sets a listener on a radio button to change the filter type on Places
@@ -87,7 +86,7 @@
         setupClickListener('changetype-all', []);
         setupClickListener('changetype-establishment', ['establishment']);
         setupClickListener('changetype-geocode', ['geocode']);
-        // setupClickListener('changetype-sublocality', ['sublocality']);
+        setupClickListener('changetype-restaurante', ['restaurante']);
     }
     google.maps.event.addDomListener(window, 'load', initialize);
 
@@ -152,8 +151,8 @@
         <input type="radio" name="type" id="changetype-geocode">
         <label for="changetype-geocode">Geocodes</label>
 
-        <!--input type="radio" name="type" id="changetype-sublocality">
-        <label for="changetype-sublocality">Sublocality</label-->
+        <input type="radio" name="type" id="changetype-restaurante">
+        <label for="changetype-restaurante">Restaurante</label>
     </div>
 
     <div style="height: 0; overflow: hidden;"><div id="map_canvas"></div></div>
