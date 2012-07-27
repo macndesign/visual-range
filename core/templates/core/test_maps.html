@@ -9,157 +9,40 @@
             font-family: sans-serif;
             font-size: 14px;
         }
-        #map_canvas {
-            height: 400px;
-            width: 600px;
-            margin-top: 0.6em;
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul > li {
+            width: 350px;
+            text-align: right;
         }
     </style>
     <script type="text/javascript">
     function initialize() {
-        var mapOptions = {
-            center: new google.maps.LatLng(-33.8688, 151.2195),
-            zoom: 13,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(document.getElementById('map_canvas'),
-                mapOptions);
-
-        var input = document.getElementById('searchTextField');
-        var autocomplete = new google.maps.places.Autocomplete(input);
-
-        autocomplete.bindTo('bounds', map);
-
-        var infowindow = new google.maps.InfoWindow();
-        var marker = new google.maps.Marker({
-            map: map
-        });
-
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
-            infowindow.close();
-            var place = autocomplete.getPlace();
-            if (place.geometry.viewport) {
-                map.fitBounds(place.geometry.viewport);
-            } else {
-                map.setCenter(place.geometry.location);
-                map.setZoom(17);  // Why 17? Because it looks good.
-            }
-
-            var image = new google.maps.MarkerImage(
-                    place.icon,
-                    new google.maps.Size(71, 71),
-                    new google.maps.Point(0, 0),
-                    new google.maps.Point(17, 34),
-                    new google.maps.Size(35, 35));
-            marker.setIcon(image);
-            marker.setPosition(place.geometry.location);
-
-            var address = '';
-            if (place.address_components) {
-                address = [(place.address_components[0] &&
-                        place.address_components[0].short_name || ''),
-                    (place.address_components[1] &&
-                            place.address_components[1].short_name || ''),
-                    (place.address_components[2] &&
-                            place.address_components[2].short_name || '')
-                ].join(' ');
-            }
-
-            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-            infowindow.open(map, marker);
-
-            // Address
-            console.log(place);
-            console.log(place.address_components);
-            console.log(place.formatted_address);
-            console.log(address);
-
-        });
-
-        // Sets a listener on a radio button to change the filter type on Places
-        // Autocomplete.
-        function setupClickListener(id, types) {
-            var radioButton = document.getElementById(id);
-            google.maps.event.addDomListener(radioButton, 'click', function() {
-                autocomplete.setTypes(types);
-            });
-        }
-
-        setupClickListener('changetype-all', []);
-        setupClickListener('changetype-establishment', ['establishment']);
-        setupClickListener('changetype-geocode', ['geocode']);
-        setupClickListener('changetype-restaurante', ['restaurante']);
-    }
-    google.maps.event.addDomListener(window, 'load', initialize);
-
-    function maps_clean() {
-        var input = document.getElementById('searchMapsClean');
+        var input = document.getElementById('search');
         var autocomplete = new google.maps.places.Autocomplete(input);
 
         google.maps.event.addListener(autocomplete, 'place_changed', function() {
-
             var place = autocomplete.getPlace();
-            var short_address, long_address = '';
-
-            if (place.address_components) {
-                short_address = [
-                    (place.address_components[0] && place.address_components[0].short_name || ''),
-                    (place.address_components[1] && place.address_components[1].short_name || ''),
-                    (place.address_components[2] && place.address_components[2].short_name || '')
-                ].join(',');
-                long_address = [
-                    (place.address_components[0] && place.address_components[0].long_name || ''),
-                    (place.address_components[1] && place.address_components[1].long_name || ''),
-                    (place.address_components[2] && place.address_components[2].long_name || '')
-                ].join(',');
-            }
-
             if (place) {
                 var objects = place.address_components;
                 for (var i = 0; i < objects.length; i ++) {
                     var short_name = objects[i].short_name;
                     var loc_type = objects[i].types[0];
                     var field = document.getElementById(loc_type + "_field");
-
                     field.value = short_name;
-
-                    console.log(field);
-                    console.log(loc_type);
-                    console.log(short_name);
                 }
             }
-
         });
-
     }
-    google.maps.event.addDomListener(window, 'load', maps_clean);
-
+    google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 {% endblock %}
 
 {% block content %}
-    <div>
-        <input id="searchTextField" type="text" size="50">
-        <input type="radio" name="type" id="changetype-all" checked="checked">
-        <label for="changetype-all">All</label>
-
-        <input type="radio" name="type" id="changetype-establishment">
-        <label for="changetype-establishment">Establishments</label>
-
-        <input type="radio" name="type" id="changetype-geocode">
-        <label for="changetype-geocode">Geocodes</label>
-
-        <input type="radio" name="type" id="changetype-restaurante">
-        <label for="changetype-restaurante">Restaurante</label>
-    </div>
-
-    <div style="height: 0; overflow: hidden;"><div id="map_canvas"></div></div>
-
-    <div>
-        <input id="searchMapsClean" type="text" size="50">
-    </div>
-
     <ul>
+        <li><input id="search" type="text" size="50"></li>
         <li>street_number: <input id="street_number_field" type="text"></li>
         <li>route: <input id="route_field" type="text"></li>
         <li>sublocality: <input id="sublocality_field" type="text"></li>
