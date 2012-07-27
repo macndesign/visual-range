@@ -71,7 +71,9 @@
             // Address
             console.log(place);
             console.log(place.address_components);
+            console.log(place.formatted_address);
             console.log(address);
+
         });
 
         // Sets a listener on a radio button to change the filter type on Places
@@ -95,8 +97,10 @@
         var autocomplete = new google.maps.places.Autocomplete(input);
 
         google.maps.event.addListener(autocomplete, 'place_changed', function() {
+
             var place = autocomplete.getPlace();
             var short_address, long_address = '';
+
             if (place.address_components) {
                 short_address = [
                     (place.address_components[0] && place.address_components[0].short_name || ''),
@@ -110,26 +114,20 @@
                 ].join(',');
             }
 
-            console.log(place);
-            console.log(place.address_components);
-            console.log(short_address.split(","));
-            console.log(long_address.split(","));
+            if (place) {
+                var objects = place.address_components;
+                for (var i = 0; i < objects.length; i ++) {
+                    var short_name = objects[i].short_name;
+                    var loc_type = objects[i].types[0];
+                    var field = document.getElementById(loc_type + "_field");
 
-            // Type: Neighborhood, City - State
-            var neighborhood = short_address.split(",")[0];
-            var city = short_address.split(",")[1];
-            var state_abbreviation = short_address.split(",")[2];
-            var state = long_address.split(",")[2];
+                    field.value = short_name;
 
-            var input_neighborhood = document.getElementById('neighborhood');
-            var input_city = document.getElementById('city');
-            var input_state_abbreviation = document.getElementById('state_abbreviation');
-            var input_state = document.getElementById('state');
-
-            input_neighborhood.value = neighborhood;
-            input_city.value = city;
-            input_state_abbreviation.value = state_abbreviation;
-            input_state.value = state;
+                    console.log(field);
+                    console.log(loc_type);
+                    console.log(short_name);
+                }
+            }
 
         });
 
@@ -158,10 +156,16 @@
     <div style="height: 0; overflow: hidden;"><div id="map_canvas"></div></div>
 
     <div>
-        <input id="searchMapsClean" type="text" size="50"><br>
-        <input placeholder="Neighborhood" id="neighborhood" type="text"><br>
-        <input placeholder="City" id="city" type="text"><br>
-        <input placeholder="State abbr." id="state_abbreviation" type="text"><br>
-        <input placeholder="State" id="state" type="text">
+        <input id="searchMapsClean" type="text" size="50">
     </div>
+
+    <ul>
+        <li>street_number: <input id="street_number_field" type="text"></li>
+        <li>route: <input id="route_field" type="text"></li>
+        <li>sublocality: <input id="sublocality_field" type="text"></li>
+        <li>locality: <input id="locality_field" type="text"></li>
+        <li>administrative_area_level_1: <input id="administrative_area_level_1_field" type="text"></li>
+        <li>country: <input id="country_field" type="text"></li>
+        <li>postal_code: <input id="postal_code_field" type="text"></li>
+    </ul>
 {% endblock %}
