@@ -1,54 +1,61 @@
-{% extends "base.html" %}
+{% extends "admin/change_form.html" %}
+{% load i18n %}
 
-{% block title %}{{ block.super }} - Maps{% endblock %}
-
-{% block extra_head %}
+{% block extrahead %}{{ block.super }}
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
-    <style>
-        body {
-            font-family: sans-serif;
-            font-size: 14px;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        ul > li {
-            width: 350px;
-            text-align: right;
-        }
-    </style>
-    <script type="text/javascript">
-    function initialize() {
-        var input = document.getElementById('search');
-        var autocomplete = new google.maps.places.Autocomplete(input);
+    <script type="text/javascript" src="{{ STATIC_URL }}gmaps-autocomplete.js"></script>
+{% endblock %}
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
-            var place = autocomplete.getPlace();
-            if (place) {
-                var objects = place.address_components;
-                for (var i = 0; i < objects.length; i ++) {
-                    var short_name = objects[i].short_name;
-                    var loc_type = objects[i].types[0];
-                    var field = document.getElementById(loc_type + "_field");
-                    field.value = short_name;
-                }
-            }
-        });
-    }
-    google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="/admin/">Home</a>
+</div>
 {% endblock %}
 
 {% block content %}
-    <ul>
-        <li><input id="search" type="text" size="50"></li>
-        <li>street_number: <input id="street_number_field" type="text"></li>
-        <li>route: <input id="route_field" type="text"></li>
-        <li>sublocality: <input id="sublocality_field" type="text"></li>
-        <li>locality: <input id="locality_field" type="text"></li>
-        <li>administrative_area_level_1: <input id="administrative_area_level_1_field" type="text"></li>
-        <li>country: <input id="country_field" type="text"></li>
-        <li>postal_code: <input id="postal_code_field" type="text"></li>
-    </ul>
+    <h1>Adicionar endereço</h1>
+    <p>Adicione através do google maps o endereço do estabelecimento.</p>
+
+    {% if form.errors %}
+        <p class="errornote">
+            {% blocktrans count counter=form.errors|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+        </p>
+        {{ form.non_field_errors }}
+    {% endif %}
+
+    <div class="form-row field-search">
+        <div>
+            <label for="id_search" class="required">Busca</label>
+            <input type="text" name="search" id="id_search" placeholder="Digite um local" autocomplete="off" size="80">
+            <p class="help">
+                Ex: Bom Futuro, Fortaleza - Ceará
+            </p>
+        </div>
+    </div>
+
+    <form action="" method="post">{% csrf_token %}
+    <div>
+        <div class="submit-row">
+            <input type="submit" value="Salvar" class="default" name="_save">
+        </div>
+
+        <fieldset class="module aligned wide">
+            {% for field in form %}
+                <div class="form-row{% if field.errors %} errors{% endif %} field-{{ field.name }}">
+                    {% if field.errors %}{{ field.errors }}{% endif %}
+                    <div>
+                        <label for="{{ field.auto_id }}" {% if field.field.required %}class="required"{% endif %}>{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <p class="help">
+                                {{ field.help_text }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </fieldset>
+    </div>
+    </form>
+    <script type="text/javascript">document.getElementById("id_search").focus();</script>
 {% endblock %}

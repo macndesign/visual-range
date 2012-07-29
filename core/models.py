@@ -22,7 +22,7 @@ class Uf(models.Model):
         return clist
 
     def __unicode__(self):
-        return self.descricao
+        return self.abreviatura
 
     def as_dict(self):
         return {

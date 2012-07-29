@@ -1,0 +1,22 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {% trans 'Mário Chaves' %}{% endblock %}
+{% block extrahead %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" />
+{% endblock %}
+
+{% block branding %}
+    <h1 id="site-name">
+        <img src="{{ STATIC_URL }}img/logo.png" alt="{% trans 'Mário Chaves' %}" />
+    </h1>
+{% endblock %}
+
+{% block userlinks %}
+    {% if user.is_superuser %}
+        <a href="{% url test:maps %}">{% trans 'Cadastrar endereço' %}</a> /
+    {% endif %}
+    {{ block.super }}
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

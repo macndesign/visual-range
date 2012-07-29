@@ -1,0 +1,9 @@
+#header {
+    background: #5A8724;
+    color: #ffc;
+    overflow: hidden;
+}
+
+.module h2, .module caption, .inline-group h2 {
+    background: #5a8724 url(../img/default-bg.gif) top left repeat-x;
+}
