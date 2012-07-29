@@ -25,13 +25,13 @@ class GMapsTemplateView(FormView):
 
         try:
             uf = Uf.objects.get(abreviatura=uf_abreviatura)
-            messages.add_message(self.request, messages.WARNING, u'A UF já existe.')
+            messages.add_message(self.request, messages.WARNING, u'O estado informado já foi cadastrado.')
 
         except Uf.DoesNotExist:
             uf.abreviatura = uf_abreviatura
             uf.descricao = uf_descricao
             uf.save()
-            messages.add_message(self.request, messages.SUCCESS, u'UF cadastrada com sucesso.')
+            messages.add_message(self.request, messages.SUCCESS, u'Estado cadastrado com sucesso.')
 
         # Salvar a cidade associada a UF
         cidade_descricao = form.cleaned_data['locality']
@@ -39,7 +39,7 @@ class GMapsTemplateView(FormView):
 
         try:
             cidade = Cidade.objects.get(descricao=cidade_descricao)
-            messages.add_message(self.request, messages.WARNING, u'A cidade já existe.')
+            messages.add_message(self.request, messages.WARNING, u'A cidade informada já foi cadastrada.')
         except Cidade.DoesNotExist:
             cidade.descricao = cidade_descricao
             cidade.uf = uf
@@ -52,7 +52,7 @@ class GMapsTemplateView(FormView):
 
         try:
             bairro = Bairro.objects.get(descricao=bairro_descricao)
-            messages.add_message(self.request, messages.WARNING, u'O bairro já existe.')
+            messages.add_message(self.request, messages.WARNING, u'O bairro informado já foi cadastrado.')
         except Bairro.DoesNotExist:
             bairro.descricao = bairro_descricao
             bairro.cidade = cidade
