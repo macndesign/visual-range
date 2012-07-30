@@ -1,18 +1,22 @@
-{% extends "admin/change_form.html" %}
-{% load i18n %}
-
-{% block extrahead %}{{ block.super }}
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static admin_modify %}
+{% block title %}{% trans "Cadastrar endereço" %}{{ block.super }}{% endblock %}
+{% block extrahead %}
+    {{ block.super }}
+    {{ media }}
+    {{ form.media }}
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}gmaps-autocomplete.js"></script>
 {% endblock %}
-
-{% block breadcrumbs %}
-<div class="breadcrumbs">
-    <a href="/admin/">Home</a>
-</div>
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
 {% endblock %}
-
+{% block coltype %}
+    {% if ordered_objects %}colMS{% else %}colM{% endif %}
+{% endblock %}
 {% block content %}
+<div id="content-main">
     <h1>Adicionar endereço</h1>
     <p>Adicione através do google maps o endereço do estabelecimento.</p>
 
@@ -34,28 +38,29 @@
     </div>
 
     <form action="" method="post">{% csrf_token %}
-    <div>
-        <div class="submit-row">
-            <input type="submit" value="Salvar" class="default" name="_save">
-        </div>
+        <div>
+            <div class="submit-row">
+                <input type="submit" value="Salvar" class="default" name="_save">
+            </div>
 
-        <fieldset class="module aligned wide">
-            {% for field in form %}
-                <div class="form-row{% if field.errors %} errors{% endif %} field-{{ field.name }}">
-                    {% if field.errors %}{{ field.errors }}{% endif %}
-                    <div>
-                        <label for="{{ field.auto_id }}" {% if field.field.required %}class="required"{% endif %}>{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.help_text %}
-                            <p class="help">
-                                {{ field.help_text }}
-                            </p>
-                        {% endif %}
+            <fieldset class="module aligned wide">
+                {% for field in form %}
+                    <div class="form-row{% if field.errors %} errors{% endif %} field-{{ field.name }}">
+                        {% if field.errors %}{{ field.errors }}{% endif %}
+                        <div>
+                            <label for="{{ field.auto_id }}" {% if field.field.required %}class="required"{% endif %}>{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <p class="help">
+                                    {{ field.help_text }}
+                                </p>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
-        </fieldset>
-    </div>
+                {% endfor %}
+            </fieldset>
+        </div>
     </form>
-    <script type="text/javascript">document.getElementById("id_search").focus();</script>
+</div>
+<script type="text/javascript">document.getElementById("id_search").focus();</script>
 {% endblock %}
