@@ -7,7 +7,7 @@ class Uf(models.Model):
 
     class Meta:
         verbose_name = 'Uf'
-        ordering = ['descricao']
+        ordering = ['abreviatura']
 
     @property
     def cidades(self):
@@ -38,6 +38,7 @@ class Cidade(models.Model):
 
     class Meta:
         ordering = ['descricao']
+        unique_together = ('descricao', 'uf')
 
     @property
     def bairros(self):
@@ -69,6 +70,7 @@ class Bairro(models.Model):
 
     class Meta:
         ordering = ['descricao']
+        unique_together = ('descricao', 'cidade')
 
     def __unicode__(self):
         return self.descricao

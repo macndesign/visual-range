@@ -35,28 +35,21 @@ class GMapsTemplateView(FormView):
 
         # Salvar a cidade associada a UF
         cidade_descricao = form.cleaned_data['locality']
-        cidade = Cidade()
+        cidade, cidade_created = Cidade.objects.get_or_create(descricao=cidade_descricao, uf=uf)
 
-        try:
-            cidade = Cidade.objects.get(descricao=cidade_descricao)
-            messages.add_message(self.request, messages.WARNING, u'A cidade informada já foi cadastrada.')
-        except Cidade.DoesNotExist:
-            cidade.descricao = cidade_descricao
-            cidade.uf = uf
-            cidade.save()
+        if cidade_created:
             messages.add_message(self.request, messages.SUCCESS, u'Cidade cadastrada com sucesso.')
+        else:
+            messages.add_message(self.request, messages.WARNING, u'A cidade informada já foi cadastrada.')
 
         # Salvar o bairro associado a uma cidade
         bairro_descricao = form.cleaned_data['sublocality']
-        bairro = Bairro()
 
-        try:
-            bairro = Bairro.objects.get(descricao=bairro_descricao)
-            messages.add_message(self.request, messages.WARNING, u'O bairro informado já foi cadastrado.')
-        except Bairro.DoesNotExist:
-            bairro.descricao = bairro_descricao
-            bairro.cidade = cidade
-            bairro.save()
+        bairro, bairro_created = Bairro.objects.get_or_create(descricao=bairro_descricao, cidade=cidade)
+
+        if bairro_created:
             messages.add_message(self.request, messages.SUCCESS, u'Bairro cadastrado com sucesso.')
+        else:
+            messages.add_message(self.request, messages.WARNING, u'O bairro informado já foi cadastrado.')
 
         return redirect(reverse('test:maps'))
