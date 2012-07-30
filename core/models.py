@@ -8,6 +8,7 @@ class Uf(models.Model):
     class Meta:
         verbose_name = 'Uf'
         ordering = ['abreviatura']
+        unique_together = ('abreviatura', 'descricao')
 
     @property
     def cidades(self):
@@ -53,7 +54,7 @@ class Cidade(models.Model):
         return blist
 
     def __unicode__(self):
-        return self.descricao
+        return u'{0} - {1}'.format(self.descricao, self.uf)
 
     def as_dict(self):
         return {
@@ -73,7 +74,7 @@ class Bairro(models.Model):
         unique_together = ('descricao', 'cidade')
 
     def __unicode__(self):
-        return self.descricao
+        return u'{0} - {1}'.format(self.descricao, self.cidade)
 
     def as_dict(self):
         return {

@@ -14,24 +14,20 @@ class TestSelect2FormView(FormView):
 class GMapsTemplateView(FormView):
     template_name = 'core/test_maps.html'
     form_class = GMapsForm
-    success_url = '/admin/'
+
+    def get_success_url(self):
+        return redirect(reverse('test:maps'))
 
     def form_valid(self, form):
-
         # Salvar a UF
         uf_descricao = form.cleaned_data['administrative_area_level_1_long_name']
         uf_abreviatura = form.cleaned_data['administrative_area_level_1']
-        uf = Uf()
+        uf, uf_created = Uf.objects.get_or_create(abreviatura=uf_abreviatura, descricao=uf_descricao)
 
-        try:
-            uf = Uf.objects.get(abreviatura=uf_abreviatura)
-            messages.add_message(self.request, messages.WARNING, u'O estado informado já foi cadastrado.')
-
-        except Uf.DoesNotExist:
-            uf.abreviatura = uf_abreviatura
-            uf.descricao = uf_descricao
-            uf.save()
+        if uf_created:
             messages.add_message(self.request, messages.SUCCESS, u'Estado cadastrado com sucesso.')
+        else:
+            messages.add_message(self.request, messages.WARNING, u'O estado informado já foi cadastrado.')
 
         # Salvar a cidade associada a UF
         cidade_descricao = form.cleaned_data['locality']
@@ -44,7 +40,6 @@ class GMapsTemplateView(FormView):
 
         # Salvar o bairro associado a uma cidade
         bairro_descricao = form.cleaned_data['sublocality']
-
         bairro, bairro_created = Bairro.objects.get_or_create(descricao=bairro_descricao, cidade=cidade)
 
         if bairro_created:
