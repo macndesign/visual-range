@@ -1,5 +1,7 @@
 # coding=utf-8
+from PIL import Image, ImageChops, ImageOps
 from django.db import models
+from django.core.files.storage import default_storage
 
 class Uf(models.Model):
     abreviatura = models.CharField(max_length=2)
@@ -82,3 +84,54 @@ class Bairro(models.Model):
             'nome': self.descricao,
             'cidade_pk': self.cidade.pk,
             }
+
+
+class PhotoImage(models.Model):
+    name = models.CharField(max_length=75)
+    photo = models.ImageField(upload_to='images')
+
+    def save(self, *args, **kwargs):
+        super(PhotoImage, self).save(*args, **kwargs)
+
+        file = self.photo.path
+        size = (300, 100)
+
+        try:
+            im = Image.open(file)
+            im_width = im.size[0]
+            im_height = im.size[1]
+
+            little = im_width if im_width < im_height else im_height
+            im.thumbnail((little, little), Image.ANTIALIAS)
+
+            im.thumbnail(size, Image.ANTIALIAS)
+            im.save(file, "JPEG")
+        except IOError:
+            return "Cannot create thumbnail for", file
+
+        """
+        size = (self.photo_width, self.photo_height)
+        image = Image.open(self.photo.path)
+        image.thumbnail(size, Image.ANTIALIAS)
+        image_size = image.size
+
+        if self.pad:
+            thumb = image.crop((0, 0, size[0], size[1]))
+            offset_x = max((size[0] - image_size[0]) / 2, 0)
+            offset_y = max((size[1] - image_size[1]) / 2, 0)
+
+            thumb = ImageChops.offset(thumb, offset_x, offset_y)
+            thumb.save(self.photo.path)
+
+        else:
+            thumb = ImageOps.fit(image, size, Image.ANTIALIAS, (0.5, 0.5))
+            thumb.save(self.photo.path)
+        """
+
+
+    def delete(self, using=None):
+        default_storage.delete(self.photo.path)
+        super(PhotoImage, self).delete(using)
+
+    def __unicode__(self):
+        return self.name
