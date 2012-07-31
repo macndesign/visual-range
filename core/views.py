@@ -4,8 +4,9 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
 from core.forms import TestForm, GMapsForm
-from core.models import Uf, Cidade, Bairro
+from core.models import Uf, Cidade, Bairro, PhotoImage
 
 class TestSelect2FormView(FormView):
     template_name = 'core/test_form.html'
@@ -48,3 +49,8 @@ class GMapsTemplateView(FormView):
             messages.add_message(self.request, messages.WARNING, u'O bairro informado já foi cadastrado.')
 
         return redirect(reverse('test:maps'))
+
+
+class PhotoImageListView(ListView):
+    template_name = 'core/test_image.html'
+    model = PhotoImage
