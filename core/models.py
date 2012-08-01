@@ -100,7 +100,7 @@ def resize_or_crop(file, size, quality=75, crop=False):
     else:
         image.thumbnail(size, Image.ANTIALIAS)
 
-    image.save(file, 'PNG', quality=quality)
+    image.save(file, 'JPEG', quality=quality)
 
 class PhotoImage(models.Model):
     name = models.CharField(max_length=75)
