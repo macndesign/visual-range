@@ -96,6 +96,7 @@ class PhotoImage(models.Model):
     photo = models.ImageField(upload_to='images')
     width = models.PositiveIntegerField(default=300)
     height = models.PositiveIntegerField(default=200)
+    crop = models.BooleanField()
 
     def save(self, *args, **kwargs):
         super(PhotoImage, self).save(*args, **kwargs)
@@ -108,14 +109,12 @@ class PhotoImage(models.Model):
             if image.mode not in ('L', 'RGB'):
                 image = image.convert('RGB')
 
-            image_fit = ImageOps.fit(image, size, Image.ANTIALIAS)
+            if self.crop:
+                image = ImageOps.fit(image, size, Image.ANTIALIAS)
+            else:
+                image.thumbnail(size, Image.ANTIALIAS)
 
-            # border rectangle in the image
-            image_draw = ImageDraw.Draw(image_fit)
-            image_draw.rectangle((0, 0, self.width - 1, self.height - 1), fill=None, outline='black')
-
-            # Save image with crop, resize and border
-            image_fit.save(file, 'JPEG', quality=75)
+            image.save(file, 'JPEG', quality=75)
 
     def __unicode__(self):
         return self.name
