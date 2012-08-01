@@ -1,10 +1,9 @@
 # coding=utf-8
 try:
-    from PIL import Image, ImageOps, ImageDraw
+    from PIL import Image, ImageOps
 except ImportError:
     import Image
     import ImageOps
-    import ImageDraw
 
 from django.db import models
 
@@ -91,30 +90,35 @@ class Bairro(models.Model):
             }
 
 
+def resize_or_crop(file, size, quality=75, crop=False):
+    image = Image.open(file)
+    if image.mode not in ('L', 'RGB'):
+        image = image.convert('RGB')
+
+    if crop:
+        image = ImageOps.fit(image, size, Image.ANTIALIAS)
+    else:
+        image.thumbnail(size, Image.ANTIALIAS)
+
+    image.save(file, 'PNG', quality=quality)
+
 class PhotoImage(models.Model):
     name = models.CharField(max_length=75)
     photo = models.ImageField(upload_to='images')
     width = models.PositiveIntegerField(default=300)
     height = models.PositiveIntegerField(default=200)
+    quality = models.PositiveIntegerField(default=75)
     crop = models.BooleanField()
 
     def save(self, *args, **kwargs):
         super(PhotoImage, self).save(*args, **kwargs)
 
-        if self.photo:
-            file = self.photo.path
-            image = Image.open(file)
-            size = (self.width, self.height)
-
-            if image.mode not in ('L', 'RGB'):
-                image = image.convert('RGB')
-
-            if self.crop:
-                image = ImageOps.fit(image, size, Image.ANTIALIAS)
-            else:
-                image.thumbnail(size, Image.ANTIALIAS)
-
-            image.save(file, 'JPEG', quality=75)
+        resize_or_crop(
+            file = self.photo.path,
+            size = (self.width, self.height),
+            quality = self.quality,
+            crop = self.crop,
+        )
 
     def __unicode__(self):
         return self.name
