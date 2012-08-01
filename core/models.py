@@ -1,9 +1,10 @@
 # coding=utf-8
 try:
-    from PIL import Image, ImageOps
+    from PIL import Image, ImageOps, ImageDraw
 except ImportError:
     import Image
     import ImageOps
+    import ImageDraw
 
 from django.db import models
 
@@ -108,6 +109,12 @@ class PhotoImage(models.Model):
                 image = image.convert('RGB')
 
             image_fit = ImageOps.fit(image, size, Image.ANTIALIAS)
+
+            # border rectangle in the image
+            image_draw = ImageDraw.Draw(image_fit)
+            image_draw.rectangle((0, 0, self.width - 1, self.height - 1), fill=None, outline='black')
+
+            # Save image with crop, resize and border
             image_fit.save(file, 'JPEG', quality=75)
 
     def __unicode__(self):
