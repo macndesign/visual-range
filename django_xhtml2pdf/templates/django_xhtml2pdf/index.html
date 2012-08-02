@@ -1,0 +1,12 @@
+<html><body>
+<h1>Example 1</h1>
+Please enter some HTML code:
+<form action="{% url report:download %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <textarea name="data">Hello <strong>World</strong></textarea>
+    <br />
+    <input type="submit" value="Convert HTML to PDF" />
+</form>
+<hr>
+<h1>Example 2</h1>
+<p><a href="{% url report:ezpdf-sample %}">Example with template</a>
+</body></html>
