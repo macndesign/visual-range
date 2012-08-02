@@ -5,8 +5,15 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.views.generic.base import TemplateView
-
 admin.autodiscover()
+
+# api
+from tastypie.api import Api
+from blog_rest.api import EntryResource, UserResource
+
+v1_api = Api(api_name='v1')
+v1_api.register(UserResource())
+v1_api.register(EntryResource())
 
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
@@ -19,4 +26,9 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+
+    # Api
+    (r'^api/', include(v1_api.urls)),
+    url(r'^send-ajax/', TemplateView.as_view(template_name='blog_rest/form_ajax_send.html'), name='send-ajax'),
+
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

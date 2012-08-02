@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block extra_head %}
+    <script src="{{ STATIC_URL }}jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    ($(function(){
+        $('button.btn1').click(function () {
+            // This may require the ``json2.js`` library for older browsers.
+            var data = JSON.stringify({
+                "body": "This will prbbly be my lst post.",
+                "pub_date": "2011-05-22T00:46:38",
+                "slug": "another-post",
+                "title": "Another Post"
+            });
+            $.ajax({
+                url: 'http://localhost:8000/api/v1/entry/',
+                type: 'POST',
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                processData: false,
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+        $('button.btn2').click(function(){
+            $.ajax({
+                url: 'http://localhost:8000/api/v1/user/1/?format=json',
+                type: 'GET',
+                accepts: 'application/json',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                }
+            })
+        });
+        $('button.btn3').click(function(){
+            $.ajax({
+                url: 'http://localhost:8000/api/v1/user/?format=json',
+                type: 'GET',
+                accepts: 'application/json',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                }
+            })
+        });
+    }))(jQuery);
+    </script>
+{% endblock %}
+{% block title %}Form Ajax Send{% endblock %}
+{% block content %}
+    <button class="btn1">Enviar</button>
+    <button class="btn2">Pegar usuário com id 1</button>
+    <button class="btn3">Pegar todos usuários</button>
+{% endblock %}
