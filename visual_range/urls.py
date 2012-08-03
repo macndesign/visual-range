@@ -5,6 +5,9 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView
+from blog_rest.forms import FormRestAjax
+
 admin.autodiscover()
 
 # api
@@ -28,7 +31,18 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     # Api
-    (r'^api/', include(v1_api.urls)),
-    url(r'^send-ajax/', TemplateView.as_view(template_name='blog_rest/form_ajax_send.html'), name='send-ajax'),
+    # (r'^api/', include(v1_api.urls)),
+    # url(
+    #     r'^send-ajax/',
+    #     FormView.as_view(
+    #         template_name='blog_rest/form_ajax_send.html',
+    #         form_class=FormRestAjax,
+    #         success_url='/send-ajax/',
+    #     ),
+    #     name='send-ajax'
+    # ),
+
+    # Basic usage of django Tasty Pie
+    (r'^api/', include('basic.api.urls')),
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

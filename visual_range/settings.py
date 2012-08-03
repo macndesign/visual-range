@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'core',
     'blog_rest',
+    'basic',
     'django_xhtml2pdf',
     'tastypie',
 )

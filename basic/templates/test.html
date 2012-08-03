@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('button').click(function(){
+            var data = JSON.stringify({
+                "content": "A new post.",
+                "is_active": true,
+                "title": "New Title",
+                "slug": "new-title",
+                "user": "/api/v1/users/1/"
+            });
+
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                url: 'http://localhost:8000/api/v1/notes/',
+                type: 'POST',
+                accepts: 'application/json',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                }
+            })
+        });
+    });
+    </script>
+</head>
+<body>
+<span>data: {"content": "A new post.", "is_active": true, "title": "New Title", "slug": "new-title", "user": "/api/v1/users/1/"}</span>
+<hr>
+<label for="id_content">content</label><input type="text" name="content" id="id_content" value="A new post.">
+<label for="id_is_active">active</label><input type="checkbox" checked="checked" name="is_active" id="id_is_active">
+<label for="id_title">title</label><input type="text" name="title" id="id_title" value="New Title">
+<label for="id_user">user</label><select name="user" id="id_user"><option value="1" selected="selected">admin</option></select>
+<button>send</button>
+</body>
+</html>

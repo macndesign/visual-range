@@ -1,4 +1,4 @@
-from tastypie.utils.timezone import now
+from tastypie.utils import now
 from tastypie.models import create_api_key
 from django.contrib.auth.models import User
 from django.db import models
