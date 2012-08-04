@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
+from basic.forms import NoteForm
 from blog_rest.forms import FormRestAjax
 
 admin.autodiscover()
@@ -44,5 +45,7 @@ urlpatterns = patterns('',
 
     # Basic usage of django Tasty Pie
     (r'^api/', include('basic.api.urls')),
+    url(r'^basic/', TemplateView.as_view(template_name='test.html'), name='basic'),
+    url(r'^basic-form/', FormView.as_view(template_name='test_form.html', form_class=NoteForm, success_url='/basic-form/'), name='basic-form'),
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
