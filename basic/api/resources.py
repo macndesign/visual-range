@@ -14,6 +14,7 @@ from tastypie.serializers import Serializer
 class PrettyJSONSerializer(Serializer):
     json_indent = 4
 
+
     def to_json(self, data, options=None):
         options = options or {}
         data = self.to_simple(data, options)
@@ -43,8 +44,18 @@ class CachedUserResource(ModelResource):
 class NoteResource(ModelResource):
     user = fields.ForeignKey(UserResource, 'user')
 
+    def create_response(self, *args, **kwargs):
+        resp = super(NoteResource, self).create_response(*args, **kwargs)
+        resp['Access-Control-Allow-Origin'] = '*'
+        resp['Access-Control-Allow-Headers'] = 'X-Requested-With'
+        return resp
+
     class Meta:
         resource_name = 'notes'
+        include_resource_uri = False
+        limit = 10
+        default_format = 'application/json'
+        allowed_methods = ('get', 'post')
         queryset = Note.objects.all()
         authorization = Authorization()
         serializer = PrettyJSONSerializer()

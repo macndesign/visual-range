@@ -5,9 +5,10 @@
     <title></title>
 </head>
 <body>
-<form action="/api/v1/notes/?format=jsonp" method="post">{% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="send">
+<form action="/api/v1/notes/?format=json" method="post" accept="application/json" enctype="application/x-www-form-urlencoded">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="send">
 </form>
 </body>
 </html>

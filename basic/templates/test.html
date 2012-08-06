@@ -18,11 +18,14 @@
             $.ajax({
                 url: '/api/v1/notes/',
                 type: 'POST',
-                dataType: 'json',
+                dataType: 'jsonp',
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Headers': 'X-Requested-With'
                 },
+                accept: 'application/json',
+                acceptCharset: 'utf-8',
+                enctype: 'application/x-www-form-urlencoded',
                 crossDomain: true,
                 jsonpCallback: 'jsonBasicTest',
                 accepts: 'application/json',
