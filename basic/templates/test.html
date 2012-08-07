@@ -8,9 +8,13 @@
     </style>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery-1.7.2.min.js"></script>
     <script type="text/javascript">
-    $(document).ready(function(){
+    ($(function(){
 
         var REST_APP = {};
+
+        REST_APP.document = $(document);
+        REST_APP.list_render = $('#notes');
+        REST_APP.all_fields = $('.field');
 
         // fields
         REST_APP.id = $('#id');
@@ -19,9 +23,6 @@
         REST_APP.title = $('#title');
         REST_APP.slug = $('#slug');
         REST_APP.user = $('#user');
-
-        // all fields
-        REST_APP.all_fields = $('.field');
 
         // buttons
         REST_APP.list = $('#list');
@@ -41,13 +42,13 @@
                 accepts: 'application/json',
                 dataType: 'json',
                 success: function (data) {
-                    $('#notes').html('');
+                    REST_APP.list_render.html('');
                     var objects = data.objects;
                     for (var i = 0; i < objects.length; i ++) {
-                        $('#notes').append('<li>' + objects[i].id + ' - ' + objects[i].title + '</li>');
+                        REST_APP.list_render.append('<li>' + objects[i].id + ' - ' + objects[i].title + '</li>');
                     }
                 }
-            })
+            });
         };
 
         REST_APP.post_data = function () {
@@ -62,8 +63,12 @@
                 type: 'POST',
                 url: '/api/v1/notes/',
                 data: data,
-                success: function(data){return 'success: ' + data},
-                error: function(data) {return 'error: ' + data},
+                success: function(data){
+                    console.log('success: ' + data);
+                },
+                error: function(data) {
+                    console.log('error: ' + data);
+                },
                 dataType: 'application/json',
                 processData:  false,
                 contentType: 'application/json'
@@ -76,7 +81,7 @@
                 type: 'DELETE',
                 accepts: 'application/json',
                 dataType: 'json'
-            })
+            });
         };
 
         REST_APP.get_item = function () {
@@ -93,7 +98,7 @@
                     REST_APP.slug.val(data.slug);
                     REST_APP.user.val('/api/v1/users/' + data.user.id + '/');
                 }
-            })
+            });
         };
 
         REST_APP.edit_item = function () {
@@ -108,42 +113,57 @@
                 type: 'PUT',
                 url: '/api/v1/notes/' + REST_APP.id.val() + '/',
                 data: data,
-                success: function(data){return 'success: ' + data},
-                error: function(data) {return 'error: ' + data},
+                success: function(data){
+                    console.log('success: ' + data);
+                },
+                error: function(data){
+                    console.log('error');
+                },
                 dataType: 'application/json',
-                processData:  false,
+                //processData:  false,
                 contentType: 'application/json'
             });
         };
 
-        REST_APP.list.click(function () {
+        // listing
+        REST_APP.document.on('click', '#' + REST_APP.list.attr('id'), function () {
             REST_APP.get_list();
         });
 
-        REST_APP.new.click(function () {
+        // posting
+        REST_APP.document.on('click', '#' + REST_APP.new.attr('id'), function () {
             REST_APP.post_data();
+
+            // listing after post
             REST_APP.get_list();
         });
 
-        REST_APP.delete.click(function () {
+        // deleting
+        REST_APP.document.on('click', '#' + REST_APP.delete.attr('id'), function () {
             REST_APP.delete_item();
+
+            // reset and listing after delete
             REST_APP.reset_form();
             REST_APP.get_list();
         });
 
-        REST_APP.detail.click(function () {
+        // getting
+        REST_APP.document.on('click', '#' + REST_APP.detail.attr('id'), function () {
             REST_APP.get_item();
         });
 
-        REST_APP.edit.click(function () {
+        // editing
+        REST_APP.document.on('click', '#' + REST_APP.edit.attr('id'), function () {
             REST_APP.edit_item();
+
+            // listing after edit
             REST_APP.get_list();
         });
 
         // listing
         REST_APP.get_list();
 
-    });
+    }))(jQuery);
     </script>
 </head>
 <body>
@@ -153,13 +173,12 @@
 <label>title: <input class="field" id="title" type="text"></label>
 <label>slug: <input class="field" id="slug" type="text"></label>
 <label>user: <input class="field" id="user" type="text"></label>
-<button id="list">list</button> <!-- GET -->
+<button id="list">list</button> <!-- GET List -->
 <button id="new">new</button> <!-- POST -->
-<button id="detail">detail</button> <!-- GET -->
+<button id="detail">detail</button> <!-- GET Item -->
 <button id="edit">edit</button> <!-- PUT -->
 <button id="delete">delete</button> <!-- DELETE -->
-
+<!-- listing -->
 <ul id="notes"></ul>
-
 </body>
 </html>
