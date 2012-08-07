@@ -20,12 +20,19 @@
         REST_APP.slug = $('#slug');
         REST_APP.user = $('#user');
 
+        // all fields
+        REST_APP.all_fields = $('.field');
+
         // buttons
         REST_APP.list = $('#list');
         REST_APP.new = $('#new');
         REST_APP.detail = $('#detail');
         REST_APP.edit = $('#edit');
         REST_APP.delete = $('#delete');
+
+        REST_APP.reset_form = function () {
+            REST_APP.all_fields.val('');
+        };
 
         REST_APP.get_list = function () {
             $.ajax({
@@ -90,7 +97,7 @@
         };
 
         REST_APP.edit_item = function () {
-            var data_edited = JSON.stringify({
+            var data = JSON.stringify({
                 "content": REST_APP.content.val(),
                 "is_active": REST_APP.is_active.val(),
                 "title": REST_APP.title.val(),
@@ -100,7 +107,7 @@
             $.ajax({
                 type: 'PUT',
                 url: '/api/v1/notes/' + REST_APP.id.val() + '/',
-                data: data_edited,
+                data: data,
                 success: function(data){return 'success: ' + data},
                 error: function(data) {return 'error: ' + data},
                 dataType: 'application/json',
@@ -115,10 +122,13 @@
 
         REST_APP.new.click(function () {
             REST_APP.post_data();
+            REST_APP.get_list();
         });
 
         REST_APP.delete.click(function () {
             REST_APP.delete_item();
+            REST_APP.reset_form();
+            REST_APP.get_list();
         });
 
         REST_APP.detail.click(function () {
@@ -127,18 +137,22 @@
 
         REST_APP.edit.click(function () {
             REST_APP.edit_item();
+            REST_APP.get_list();
         });
+
+        // listing
+        REST_APP.get_list();
 
     });
     </script>
 </head>
 <body>
-<label>id: <input id="id" type="text"></label>
-<label>content: <input id="content" type="text"></label>
-<label>is_active: <input id="is_active" type="text"></label>
-<label>title: <input id="title" type="text"></label>
-<label>slug: <input id="slug" type="text"></label>
-<label>user: <input id="user" type="text"></label>
+<label>id: <input class="field" id="id" type="text"></label>
+<label>content: <input class="field" id="content" type="text"></label>
+<label>is_active: <input class="field" id="is_active" type="text"></label>
+<label>title: <input class="field" id="title" type="text"></label>
+<label>slug: <input class="field" id="slug" type="text"></label>
+<label>user: <input class="field" id="user" type="text"></label>
 <button id="list">list</button> <!-- GET -->
 <button id="new">new</button> <!-- POST -->
 <button id="detail">detail</button> <!-- GET -->
