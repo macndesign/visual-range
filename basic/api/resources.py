@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from tastypie import fields
+from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization
@@ -25,6 +26,7 @@ class UserResource(ModelResource):
         resource_name = 'users'
         queryset = User.objects.all()
         authorization = Authorization()
+        serializer = PrettyJSONSerializer()
 
 
 class CachedUserResource(ModelResource):
@@ -40,12 +42,13 @@ class CachedUserResource(ModelResource):
 
 
 class NoteResource(ModelResource):
-    user = fields.ForeignKey(UserResource, 'user')
+    user = fields.ForeignKey(UserResource, 'user', full=True)
 
     class Meta:
         resource_name = 'notes'
         queryset = Note.objects.all()
         authorization = Authorization()
+        filtering = {'user': ALL_WITH_RELATIONS}
         serializer = PrettyJSONSerializer()
 
 

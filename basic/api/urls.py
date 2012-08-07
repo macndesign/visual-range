@@ -1,4 +1,3 @@
-from django.conf.urls.defaults import *
 from tastypie.api import Api
 from basic.api.resources import NoteResource, UserResource, BustedResource, CachedUserResource, SlugBasedNoteResource, SessionUserResource
 

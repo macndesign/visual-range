@@ -10,19 +10,47 @@
     <script type="text/javascript">
     $(document).ready(function(){
 
-        var data = '';
+        var REST_APP = {};
 
-        $('button').click(function () {
-            data = JSON.stringify({
-                "content": $('#content').val(),
-                "is_active": $('#is_active').val(),
-                "title": $('#title').val(),
-                "slug": $('#slug').val(),
-                "user": $('#user').val()
+        // fields
+        REST_APP.id = $('#id');
+        REST_APP.content = $('#content');
+        REST_APP.is_active = $('#is_active');
+        REST_APP.title = $('#title');
+        REST_APP.slug = $('#slug');
+        REST_APP.user = $('#user');
+
+        // buttons
+        REST_APP.list = $('#list');
+        REST_APP.new = $('#new');
+        REST_APP.detail = $('#detail');
+        REST_APP.edit = $('#edit');
+        REST_APP.delete = $('#delete');
+
+        REST_APP.get_list = function () {
+            $.ajax({
+                url: '/api/v1/notes/?format=json',
+                type: 'GET',
+                accepts: 'application/json',
+                dataType: 'json',
+                success: function (data) {
+                    $('#notes').html('');
+                    var objects = data.objects;
+                    for (var i = 0; i < objects.length; i ++) {
+                        $('#notes').append('<li>' + objects[i].id + ' - ' + objects[i].title + '</li>');
+                    }
+                }
+            })
+        };
+
+        REST_APP.post_data = function () {
+            var data = JSON.stringify({
+                "content": REST_APP.content.val(),
+                "is_active": REST_APP.is_active.val(),
+                "title": REST_APP.title.val(),
+                "slug": REST_APP.slug.val(),
+                "user": REST_APP.user.val()
             });
-        });
-
-        $('#new').click(function () {
             $.ajax({
                 type: 'POST',
                 url: '/api/v1/notes/',
@@ -33,62 +61,45 @@
                 processData:  false,
                 contentType: 'application/json'
             });
-        });
+        };
 
-        $('#list').click(function () {
+        REST_APP.delete_item = function () {
             $.ajax({
-                url: '/api/v1/notes/?format=json',
-                type: 'GET',
-                accepts: 'application/json',
-                dataType: 'json',
-                success: function (data) {
-                    var objects = data.objects;
-                    for (var i = 0; i < objects.length; i ++) {
-                        $('#notes').append('<li>' + objects[i].id + ' - ' + objects[i].title + '</li>');
-                    }
-                }
-            })
-        });
-
-        $('#delete').click(function () {
-            $.ajax({
-                url: '/api/v1/notes/' + $('#id').val() + '/',
+                url: '/api/v1/notes/' + REST_APP.id.val() + '/',
                 type: 'DELETE',
                 accepts: 'application/json',
                 dataType: 'json'
             })
-        });
+        };
 
-        $('#detail').click(function () {
+        REST_APP.get_item = function () {
             $.ajax({
-                url: '/api/v1/notes/' + $('#id').val() + '/?format=json',
+                url: '/api/v1/notes/' + REST_APP.id.val() + '/?format=json',
                 type: 'GET',
                 accepts: 'application/json',
                 dataType: 'json',
                 success: function (data) {
                     console.log(data);
-                    $('#content').val(data.content);
-                    $('#is_active').val(data.is_active);
-                    $('#title').val(data.title);
-                    $('#slug').val(data.slug);
-                    $('#user').val(data.user);
+                    REST_APP.content.val(data.content);
+                    REST_APP.is_active.val(data.is_active);
+                    REST_APP.title.val(data.title);
+                    REST_APP.slug.val(data.slug);
+                    REST_APP.user.val('/api/v1/users/' + data.user.id + '/');
                 }
             })
-        });
+        };
 
-        $('#edit').click(function () {
-
+        REST_APP.edit_item = function () {
             var data_edited = JSON.stringify({
-                "content": $('#content').val(),
-                "is_active": $('#is_active').val(),
-                "title": $('#title').val(),
-                "slug": $('#slug').val(),
-                "user": $('#user').val()
+                "content": REST_APP.content.val(),
+                "is_active": REST_APP.is_active.val(),
+                "title": REST_APP.title.val(),
+                "slug": REST_APP.slug.val(),
+                "user": REST_APP.user.val()
             });
-
             $.ajax({
                 type: 'PUT',
-                url: '/api/v1/notes/' + $('#id').val() + '/',
+                url: '/api/v1/notes/' + REST_APP.id.val() + '/',
                 data: data_edited,
                 success: function(data){return 'success: ' + data},
                 error: function(data) {return 'error: ' + data},
@@ -96,6 +107,26 @@
                 processData:  false,
                 contentType: 'application/json'
             });
+        };
+
+        REST_APP.list.click(function () {
+            REST_APP.get_list();
+        });
+
+        REST_APP.new.click(function () {
+            REST_APP.post_data();
+        });
+
+        REST_APP.delete.click(function () {
+            REST_APP.delete_item();
+        });
+
+        REST_APP.detail.click(function () {
+            REST_APP.get_item();
+        });
+
+        REST_APP.edit.click(function () {
+            REST_APP.edit_item();
         });
 
     });
