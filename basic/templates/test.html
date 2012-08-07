@@ -50,6 +50,54 @@
             })
         });
 
+        $('#delete').click(function () {
+            $.ajax({
+                url: '/api/v1/notes/' + $('#id').val() + '/',
+                type: 'DELETE',
+                accepts: 'application/json',
+                dataType: 'json'
+            })
+        });
+
+        $('#detail').click(function () {
+            $.ajax({
+                url: '/api/v1/notes/' + $('#id').val() + '/?format=json',
+                type: 'GET',
+                accepts: 'application/json',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    $('#content').val(data.content);
+                    $('#is_active').val(data.is_active);
+                    $('#title').val(data.title);
+                    $('#slug').val(data.slug);
+                    $('#user').val(data.user);
+                }
+            })
+        });
+
+        $('#edit').click(function () {
+
+            var data_edited = JSON.stringify({
+                "content": $('#content').val(),
+                "is_active": $('#is_active').val(),
+                "title": $('#title').val(),
+                "slug": $('#slug').val(),
+                "user": $('#user').val()
+            });
+
+            $.ajax({
+                type: 'PUT',
+                url: '/api/v1/notes/' + $('#id').val() + '/',
+                data: data_edited,
+                success: function(data){return 'success: ' + data},
+                error: function(data) {return 'error: ' + data},
+                dataType: 'application/json',
+                processData:  false,
+                contentType: 'application/json'
+            });
+        });
+
     });
     </script>
 </head>
