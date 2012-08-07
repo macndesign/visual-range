@@ -12,36 +12,18 @@
                 "is_active": true,
                 "title": "New Title",
                 "slug": "new-title",
-                "user": "/api/v1/users/1/"
-            });
+                "user": "/api/v1/users/1/"}
+            );
 
             $.ajax({
-                url: '/api/v1/notes/',
                 type: 'POST',
-                dataType: 'jsonp',
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Headers': 'X-Requested-With'
-                },
-                accept: 'application/json',
-                acceptCharset: 'utf-8',
-                enctype: 'application/x-www-form-urlencoded',
-                crossDomain: true,
-                jsonpCallback: 'jsonBasicTest',
-                accepts: 'application/json',
-                contentType: 'application/json',
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-                    xhr.setRequestHeader('Access-Control-Allow-Headers', 'X-Requested-With');
-                },
-                success: function(data, textStatus, XMLHttpRequest) {
-                    console.log(textStatus);
-                    console.log(data);
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    console.log(textStatus);
-                }
-            })
+                url: '/api/v1/notes/',
+                data: data,
+                success: function(data){return data},
+                dataType: 'application/json',
+                processData:  false,
+                contentType: 'application/json'
+            });
         });
     });
     </script>

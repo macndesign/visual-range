@@ -16,7 +16,8 @@ from tastypie.bundle import Bundle
 from tastypie.cache import NoCache
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.exceptions import NotFound, BadRequest, InvalidFilterError, HydrationError, InvalidSortError, ImmediateHttpResponse
-from tastypie import http, fields
+from tastypie import fields
+from tastypie import http
 from tastypie.paginator import Paginator
 from tastypie.serializers import Serializer
 from tastypie.throttle import BaseThrottle
@@ -434,6 +435,10 @@ class Resource(object):
         throttling, method lookup) surrounding most CRUD interactions.
         """
         allowed_methods = getattr(self._meta, "%s_allowed_methods" % request_type, None)
+
+        if 'HTTP_X_HTTP_METHOD_OVERRIDE' in request.META:
+            request.method = request.META['HTTP_X_HTTP_METHOD_OVERRIDE']
+
         request_method = self.method_check(request, allowed=allowed_methods)
         method = getattr(self, "%s_%s" % (request_method, request_type), None)
 

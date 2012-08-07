@@ -2,11 +2,8 @@ import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django import forms
-try:
-    from tastypie.utils import now
-except ImportError:
-    import datetime
-    now = datetime.datetime.now
+from tastypie.utils import now
+
 
 class Note(models.Model):
     user = models.ForeignKey(User, related_name='notes')
