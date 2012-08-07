@@ -15,6 +15,7 @@
         REST_APP.document = $(document);
         REST_APP.list_render = $('#notes');
         REST_APP.all_fields = $('.field');
+        REST_APP.log = $('#log');
 
         // fields
         REST_APP.id = $('#id');
@@ -36,18 +37,24 @@
         };
 
         REST_APP.get_list = function () {
-            $.ajax({
+            // request ajax
+            REST_APP.request = $.ajax({
                 url: '/api/v1/notes/?format=json',
                 type: 'GET',
                 accepts: 'application/json',
-                dataType: 'json',
-                success: function (data) {
-                    REST_APP.list_render.html('');
-                    var objects = data.objects;
-                    for (var i = 0; i < objects.length; i ++) {
-                        REST_APP.list_render.append('<li>' + objects[i].id + ' - ' + objects[i].title + '</li>');
-                    }
+                dataType: 'json'
+            });
+            // request done
+            REST_APP.request.done(function(data){
+                REST_APP.list_render.html('');
+                var objects = data.objects;
+                for (var i = 0; i < objects.length; i ++) {
+                    REST_APP.list_render.append('<li>' + objects[i].id + ' - ' + objects[i].title + '</li>');
                 }
+            });
+            // request fail
+            REST_APP.request.fail(function(jqXHR, textStatus){
+                REST_APP.log.html( "Request failed: " + textStatus );
             });
         };
 
@@ -167,6 +174,7 @@
     </script>
 </head>
 <body>
+<div id="log"></div>
 <label>id: <input class="field" id="id" type="text"></label>
 <label>content: <input class="field" id="content" type="text"></label>
 <label>is_active: <input class="field" id="is_active" type="text"></label>
