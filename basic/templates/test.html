@@ -35,6 +35,21 @@
             });
         });
 
+        $('#list').click(function () {
+            $.ajax({
+                url: '/api/v1/notes/?format=json',
+                type: 'GET',
+                accepts: 'application/json',
+                dataType: 'json',
+                success: function (data) {
+                    var objects = data.objects;
+                    for (var i = 0; i < objects.length; i ++) {
+                        $('#notes').append('<li>' + objects[i].id + ' - ' + objects[i].title + '</li>');
+                    }
+                }
+            })
+        });
+
     });
     </script>
 </head>
@@ -47,7 +62,11 @@
 <label>user: <input id="user" type="text"></label>
 <button id="list">list</button> <!-- GET -->
 <button id="new">new</button> <!-- POST -->
+<button id="detail">detail</button> <!-- GET -->
 <button id="edit">edit</button> <!-- PUT -->
 <button id="delete">delete</button> <!-- DELETE -->
+
+<ul id="notes"></ul>
+
 </body>
 </html>
