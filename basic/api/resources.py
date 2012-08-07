@@ -1,11 +1,23 @@
-from django.conf.urls.defaults import url
 from django.contrib.auth.models import User
-from tastypie.bundle import Bundle
 from tastypie import fields
 from tastypie.resources import ModelResource
 from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization
 from basic.models import Note, AnnotatedNote, SlugBasedNote
+
+# Pretty JSON Serializer
+from django.core.serializers import json
+from django.utils import simplejson
+from tastypie.serializers import Serializer
+
+class PrettyJSONSerializer(Serializer):
+    json_indent = 4
+
+    def to_json(self, data, options=None):
+        options = options or {}
+        data = self.to_simple(data, options)
+        return simplejson.dumps(data, cls=json.DjangoJSONEncoder,
+            sort_keys=True, ensure_ascii=False, indent=self.json_indent)
 
 
 class UserResource(ModelResource):
@@ -34,6 +46,7 @@ class NoteResource(ModelResource):
         resource_name = 'notes'
         queryset = Note.objects.all()
         authorization = Authorization()
+        serializer = PrettyJSONSerializer()
 
 
 class BustedResource(ModelResource):
