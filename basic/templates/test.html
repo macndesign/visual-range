@@ -5,6 +5,7 @@
     <title>Test django Tastypie</title>
     <style type="text/css">
         label { display: block }
+        #log { height: 1em }
     </style>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery-1.7.2.min.js"></script>
     <script type="text/javascript">
@@ -45,6 +46,7 @@
             // request done
             REST_APP.request.done(function(data){
                 REST_APP.list_render.html('');
+                REST_APP.log.html("Success!");
                 var objects = data.objects;
                 for (var i = 0; i < objects.length; i ++) {
                     REST_APP.list_render.append('<li>' + objects[i].id + ' - ' + objects[i].title + '</li>');
@@ -184,7 +186,7 @@
     </script>
 </head>
 <body>
-<div id="log" style="height: 1em"></div>
+<div id="log"></div>
 <label>id: <input class="field" id="id" type="text" value="1"></label>
 <label>content: <input class="field" id="content" type="text" value="test"></label>
 <label>is_active: <input class="field" id="is_active" type="text" value="true"></label>

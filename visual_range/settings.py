@@ -102,7 +102,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'visual_range.middleware.django-crossdomainxhr.XsSharing'
 )
 
 ROOT_URLCONF = 'visual_range.urls'
