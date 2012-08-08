@@ -8,7 +8,7 @@
     </style>
     <script type="text/javascript" src="{{ STATIC_URL }}jquery-1.7.2.min.js"></script>
     <script type="text/javascript">
-    ($(function(){
+    $(document).ready(function(){
 
         var REST_APP = {};
 
@@ -40,9 +40,7 @@
             // request ajax
             REST_APP.request = $.ajax({
                 url: '/api/v1/notes/?format=json',
-                type: 'GET',
-                accepts: 'application/json',
-                dataType: 'json'
+                type: 'GET'
             });
             // request done
             REST_APP.request.done(function(data){
@@ -54,81 +52,103 @@
             });
             // request fail
             REST_APP.request.fail(function(jqXHR, textStatus){
-                REST_APP.log.html( "Request failed: " + textStatus );
-            });
-        };
-
-        REST_APP.post_data = function () {
-            var data = JSON.stringify({
-                "content": REST_APP.content.val(),
-                "is_active": REST_APP.is_active.val(),
-                "title": REST_APP.title.val(),
-                "slug": REST_APP.slug.val(),
-                "user": REST_APP.user.val()
-            });
-            $.ajax({
-                type: 'POST',
-                url: '/api/v1/notes/',
-                data: data,
-                success: function(data){
-                    console.log('success: ' + data);
-                },
-                error: function(data) {
-                    console.log('error: ' + data);
-                },
-                dataType: 'application/json',
-                processData:  false,
-                contentType: 'application/json'
-            });
-        };
-
-        REST_APP.delete_item = function () {
-            $.ajax({
-                url: '/api/v1/notes/' + REST_APP.id.val() + '/',
-                type: 'DELETE',
-                accepts: 'application/json',
-                dataType: 'json'
+                REST_APP.log.html("Get list request failed: " + textStatus);
             });
         };
 
         REST_APP.get_item = function () {
-            $.ajax({
+            // request ajax
+            REST_APP.request = $.ajax({
                 url: '/api/v1/notes/' + REST_APP.id.val() + '/?format=json',
-                type: 'GET',
-                accepts: 'application/json',
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    REST_APP.content.val(data.content);
-                    REST_APP.is_active.val(data.is_active);
-                    REST_APP.title.val(data.title);
-                    REST_APP.slug.val(data.slug);
-                    REST_APP.user.val('/api/v1/users/' + data.user.id + '/');
-                }
+                type: 'GET'
+            });
+            // request done
+            REST_APP.request.done(function(data){
+                REST_APP.log.html("Success!");
+                REST_APP.content.val(data.content);
+                REST_APP.is_active.val(data.is_active);
+                REST_APP.title.val(data.title);
+                REST_APP.slug.val(data.slug);
+                REST_APP.user.val('/api/v1/users/' + data.user.id + '/');
+            });
+            // request fail
+            REST_APP.request.fail(function(jqXHR, textStatus){
+                REST_APP.log.html("Get item request failed: " + textStatus);
             });
         };
 
-        REST_APP.edit_item = function () {
-            var data = JSON.stringify({
+        REST_APP.delete_item = function () {
+            // request ajax
+            REST_APP.request = $.ajax({
+                url: '/api/v1/notes/' + REST_APP.id.val() + '/',
+                type: 'DELETE'
+            });
+            // request done
+            REST_APP.request.done(function(data){
+                REST_APP.log.html("Success!");
+                // reset and listing after delete
+                REST_APP.reset_form();
+                REST_APP.get_list();
+            });
+            // request fail
+            REST_APP.request.fail(function(jqXHR, textStatus){
+                REST_APP.log.html("Post data request failed: " + textStatus);
+            });
+        };
+
+        REST_APP.post_data = function () {
+            // form data
+            REST_APP.data = JSON.stringify({
                 "content": REST_APP.content.val(),
                 "is_active": REST_APP.is_active.val(),
                 "title": REST_APP.title.val(),
                 "slug": REST_APP.slug.val(),
                 "user": REST_APP.user.val()
             });
-            $.ajax({
-                type: 'PUT',
-                url: '/api/v1/notes/' + REST_APP.id.val() + '/',
-                data: data,
-                success: function(data){
-                    console.log('success: ' + data);
-                },
-                error: function(data){
-                    console.log('error');
-                },
-                dataType: 'application/json',
-                //processData:  false,
+            // request ajax
+            REST_APP.request = $.ajax({
+                url: '/api/v1/notes/',
+                data: REST_APP.data,
+                type: 'POST',
                 contentType: 'application/json'
+            });
+            // request done
+            REST_APP.request.done(function(data){
+                REST_APP.log.html("Success!");
+                // listing after post
+                REST_APP.get_list();
+            });
+            // request fail
+            REST_APP.request.fail(function(jqXHR, textStatus){
+                REST_APP.log.html("Post data request failed: " + textStatus);
+            });
+        };
+
+        REST_APP.edit_item = function () {
+            // form data
+            REST_APP.data = JSON.stringify({
+                "content": REST_APP.content.val(),
+                "is_active": REST_APP.is_active.val(),
+                "title": REST_APP.title.val(),
+                "slug": REST_APP.slug.val(),
+                "user": REST_APP.user.val()
+            });
+            // request ajax
+            REST_APP.request = $.ajax({
+                url: '/api/v1/notes/' + REST_APP.id.val() + '/',
+                data: REST_APP.data,
+                type: 'PUT',
+                contentType: 'application/json'
+            });
+            // request done
+            REST_APP.request.done(function(data){
+                REST_APP.log.html("Success!");
+                // listing after edit
+                REST_APP.get_list();
+            });
+            // request fail
+            REST_APP.request.fail(function(jqXHR, textStatus){
+                REST_APP.log.html("Put data request failed: " + textStatus);
             });
         };
 
@@ -140,18 +160,11 @@
         // posting
         REST_APP.document.on('click', '#' + REST_APP.new.attr('id'), function () {
             REST_APP.post_data();
-
-            // listing after post
-            REST_APP.get_list();
         });
 
         // deleting
         REST_APP.document.on('click', '#' + REST_APP.delete.attr('id'), function () {
             REST_APP.delete_item();
-
-            // reset and listing after delete
-            REST_APP.reset_form();
-            REST_APP.get_list();
         });
 
         // getting
@@ -162,25 +175,22 @@
         // editing
         REST_APP.document.on('click', '#' + REST_APP.edit.attr('id'), function () {
             REST_APP.edit_item();
-
-            // listing after edit
-            REST_APP.get_list();
         });
 
         // listing
         REST_APP.get_list();
 
-    }))(jQuery);
+    });
     </script>
 </head>
 <body>
-<div id="log"></div>
-<label>id: <input class="field" id="id" type="text"></label>
-<label>content: <input class="field" id="content" type="text"></label>
-<label>is_active: <input class="field" id="is_active" type="text"></label>
-<label>title: <input class="field" id="title" type="text"></label>
-<label>slug: <input class="field" id="slug" type="text"></label>
-<label>user: <input class="field" id="user" type="text"></label>
+<div id="log" style="height: 1em"></div>
+<label>id: <input class="field" id="id" type="text" value="1"></label>
+<label>content: <input class="field" id="content" type="text" value="test"></label>
+<label>is_active: <input class="field" id="is_active" type="text" value="true"></label>
+<label>title: <input class="field" id="title" type="text" value="test"></label>
+<label>slug: <input class="field" id="slug" type="text" value="test"></label>
+<label>user: <input class="field" id="user" type="text" value="/api/v1/users/1/"></label>
 <button id="list">list</button> <!-- GET List -->
 <button id="new">new</button> <!-- POST -->
 <button id="detail">detail</button> <!-- GET Item -->
