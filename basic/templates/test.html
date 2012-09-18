@@ -4,200 +4,26 @@
     <meta charset="utf-8">
     <title>Test django Tastypie</title>
     <style type="text/css">
+        html. body { font-family: Arial, sans-serif }
         label { display: block }
-        #log { height: 1em }
     </style>
+    <link href="{{ STATIC_URL }}jquery-toastmessage/main/resources/css/jquery.toastmessage.css" media="screen" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="{{ STATIC_URL }}jquery-1.7.2.min.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function(){
-
-        var REST_APP = {};
-
-        REST_APP.document = $(document);
-        REST_APP.list_render = $('#notes');
-        REST_APP.all_fields = $('.field');
-        REST_APP.log = $('#log');
-
-        // fields
-        REST_APP.id = $('#id');
-        REST_APP.content = $('#content');
-        REST_APP.is_active = $('#is_active');
-        REST_APP.title = $('#title');
-        REST_APP.slug = $('#slug');
-        REST_APP.user = $('#user');
-
-        // buttons
-        REST_APP.list = $('#list');
-        REST_APP.new = $('#new');
-        REST_APP.detail = $('#detail');
-        REST_APP.edit = $('#edit');
-        REST_APP.delete = $('#delete');
-
-        REST_APP.reset_form = function () {
-            REST_APP.all_fields.val('');
-        };
-
-        REST_APP.get_list = function () {
-            // request ajax
-            REST_APP.request = $.ajax({
-                url: '/api/v1/notes/?format=json',
-                type: 'GET'
-            });
-            // request done
-            REST_APP.request.done(function(data){
-                REST_APP.list_render.html('');
-                REST_APP.log.html("Success!");
-                var objects = data.objects;
-                for (var i = 0; i < objects.length; i ++) {
-                    REST_APP.list_render.append('<li>' + objects[i].id + ' - ' + objects[i].title + '</li>');
-                }
-            });
-            // request fail
-            REST_APP.request.fail(function(jqXHR, textStatus){
-                REST_APP.log.html("Get list request failed: " + textStatus);
-            });
-        };
-
-        REST_APP.get_item = function () {
-            // request ajax
-            REST_APP.request = $.ajax({
-                url: '/api/v1/notes/' + REST_APP.id.val() + '/?format=json',
-                type: 'GET'
-            });
-            // request done
-            REST_APP.request.done(function(data){
-                REST_APP.log.html("Success!");
-                REST_APP.content.val(data.content);
-                REST_APP.is_active.val(data.is_active);
-                REST_APP.title.val(data.title);
-                REST_APP.slug.val(data.slug);
-                REST_APP.user.val('/api/v1/users/' + data.user.id + '/');
-            });
-            // request fail
-            REST_APP.request.fail(function(jqXHR, textStatus){
-                REST_APP.log.html("Get item request failed: " + textStatus);
-            });
-        };
-
-        REST_APP.delete_item = function () {
-            // request ajax
-            REST_APP.request = $.ajax({
-                url: '/api/v1/notes/' + REST_APP.id.val() + '/',
-                type: 'DELETE'
-            });
-            // request done
-            REST_APP.request.done(function(data){
-                REST_APP.log.html("Success!");
-                // reset and listing after delete
-                REST_APP.reset_form();
-                REST_APP.get_list();
-            });
-            // request fail
-            REST_APP.request.fail(function(jqXHR, textStatus){
-                REST_APP.log.html("Post data request failed: " + textStatus);
-            });
-        };
-
-        REST_APP.post_data = function () {
-            // form data
-            REST_APP.data = JSON.stringify({
-                "content": REST_APP.content.val(),
-                "is_active": REST_APP.is_active.val(),
-                "title": REST_APP.title.val(),
-                "slug": REST_APP.slug.val(),
-                "user": REST_APP.user.val()
-            });
-            // request ajax
-            REST_APP.request = $.ajax({
-                url: '/api/v1/notes/',
-                data: REST_APP.data,
-                type: 'POST',
-                contentType: 'application/json'
-            });
-            // request done
-            REST_APP.request.done(function(data){
-                REST_APP.log.html("Success!");
-                // listing after post
-                REST_APP.get_list();
-            });
-            // request fail
-            REST_APP.request.fail(function(jqXHR, textStatus){
-                REST_APP.log.html("Post data request failed: " + textStatus);
-            });
-        };
-
-        REST_APP.edit_item = function () {
-            // form data
-            REST_APP.data = JSON.stringify({
-                "content": REST_APP.content.val(),
-                "is_active": REST_APP.is_active.val(),
-                "title": REST_APP.title.val(),
-                "slug": REST_APP.slug.val(),
-                "user": REST_APP.user.val()
-            });
-            // request ajax
-            REST_APP.request = $.ajax({
-                url: '/api/v1/notes/' + REST_APP.id.val() + '/',
-                data: REST_APP.data,
-                type: 'PUT',
-                contentType: 'application/json'
-            });
-            // request done
-            REST_APP.request.done(function(data){
-                REST_APP.log.html("Success!");
-                // listing after edit
-                REST_APP.get_list();
-            });
-            // request fail
-            REST_APP.request.fail(function(jqXHR, textStatus){
-                REST_APP.log.html("Put data request failed: " + textStatus);
-            });
-        };
-
-        // listing
-        REST_APP.document.on('click', '#' + REST_APP.list.attr('id'), function () {
-            REST_APP.get_list();
-        });
-
-        // posting
-        REST_APP.document.on('click', '#' + REST_APP.new.attr('id'), function () {
-            REST_APP.post_data();
-        });
-
-        // deleting
-        REST_APP.document.on('click', '#' + REST_APP.delete.attr('id'), function () {
-            REST_APP.delete_item();
-        });
-
-        // getting
-        REST_APP.document.on('click', '#' + REST_APP.detail.attr('id'), function () {
-            REST_APP.get_item();
-        });
-
-        // editing
-        REST_APP.document.on('click', '#' + REST_APP.edit.attr('id'), function () {
-            REST_APP.edit_item();
-        });
-
-        // listing
-        REST_APP.get_list();
-
-    });
-    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery-toastmessage/main/javascript/jquery.toastmessage.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}default.js"></script>
 </head>
 <body>
-<div id="log"></div>
-<label>id: <input class="field" id="id" type="text" value="1"></label>
-<label>content: <input class="field" id="content" type="text" value="test"></label>
-<label>is_active: <input class="field" id="is_active" type="text" value="true"></label>
-<label>title: <input class="field" id="title" type="text" value="test"></label>
-<label>slug: <input class="field" id="slug" type="text" value="test"></label>
-<label>user: <input class="field" id="user" type="text" value="/api/v1/users/1/"></label>
-<button id="list">list</button> <!-- GET List -->
-<button id="new">new</button> <!-- POST -->
-<button id="detail">detail</button> <!-- GET Item -->
-<button id="edit">edit</button> <!-- PUT -->
-<button id="delete">delete</button> <!-- DELETE -->
+<label>ID: <input class="field" id="id" type="text" value="1"></label>
+<label>Content: <input class="field" id="content" type="text" value="test"></label>
+<label>Active: <input class="field" id="is_active" type="text" value="true"></label>
+<label>Title: <input class="field" id="title" type="text" value="test"></label>
+<label>Slug: <input class="field" id="slug" type="text" value="test"></label>
+<label>User: <input class="field" id="user" type="text" value="/api/v1/users/1/"></label>
+<button id="list">List</button> <!-- GET List -->
+<button id="new">New</button> <!-- POST -->
+<button id="detail">Detail</button> <!-- GET Item -->
+<button id="edit">Edit</button> <!-- PUT -->
+<button id="delete">Delete</button> <!-- DELETE -->
 <!-- listing -->
 <ul id="notes"></ul>
 </body>
